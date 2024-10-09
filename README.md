@@ -96,16 +96,13 @@
 - API 명세 및 Mock API 작성
 - 자료들을 리드미에 작성 후 PR링크 제출 ( 채택할 기본 패키지 구조, 기술 스택 등 )
 
-<details>
-<summary>마일스톤</summary>
+### 마일스톤
 
-</div>
-</details>
 
-<details>
-<summary>시퀀스 다이어그램</summary>
 
-1 토큰 검증 및 토큰 발급 후 대기열 등록
+### 시퀀스 다이어그램
+
+##### 1 토큰 검증 및 토큰 발급 후 대기열 등록
 
 ```mermaid
 sequenceDiagram
@@ -136,7 +133,7 @@ sequenceDiagram
 
 ```
 
-2-1 콘서트 일정 조회
+##### 2-1 콘서트 일정 조회
 
 ```mermaid
 sequenceDiagram
@@ -159,7 +156,7 @@ sequenceDiagram
     end
 ```
 
-2-2 콘서트 좌석 조회
+##### 2-2 콘서트 좌석 조회
 
 ```mermaid
 sequenceDiagram
@@ -182,7 +179,7 @@ sequenceDiagram
 
 ```
 
-3 콘서트 예약 신청 및 임시예약
+##### 3 콘서트 예약 신청 및 임시예약
 
 ```mermaid
 sequenceDiagram
@@ -217,7 +214,7 @@ sequenceDiagram
 
 ```
 
-4-1 포인트 잔액 조회
+##### 4-1 포인트 잔액 조회
 
 ```mermaid
 sequenceDiagram
@@ -240,7 +237,7 @@ sequenceDiagram
 
 ```
 
-4-2 포인트 충전
+##### 4-2 포인트 충전
 
 ```mermaid
 sequenceDiagram
@@ -262,7 +259,7 @@ sequenceDiagram
     end
 
 ```
-5 포인트를 사용한 결제 및 대기열 삭제
+##### 5 포인트를 사용한 결제 및 대기열 삭제
 
 ```mermaid
 sequenceDiagram
@@ -296,7 +293,32 @@ sequenceDiagram
     end
 ```
 
-</div>
-</details>
+### 플로우차트
+```mermaid
+flowchart TD
+    A[사용자 좌석 예약 요청] --> B{토큰 유효성 확인}
+    B -->|토큰 없음| C[신규 토큰 생성 요청 및 대기열 등록]
+    C --> D[토큰 생성 완료 및 대기열 등록 응답]
+    D --> G[대기열 상태 확인]
 
+    B -->|토큰 있음| G[대기열 상태 확인]
+
+    G -->|유효한 대기열| H[좌석 정보 조회 요청]
+    H --> I[좌석 목록 반환]
+    
+    G -->|유효하지 않은 대기열| J[대기열 유효하지 않음 응답]
+
+    I --> K[예약 신청 요청]
+    K --> L[잔액 조회 요청]
+    L --> M{잔액 확인}
+    M -->|잔액 충분| N[결제 요청]
+    M -->|잔액 부족| O[잔액 충전 요청]
+    
+    N --> P{결제 처리 결과}
+    P -->|결제 성공| Q[좌석 소유권 배정 요청]
+    P -->|결제 실패| R[결제 실패 응답]
+    
+    Q --> S[대기열 토큰 만료 요청]
+    S --> T[예약 성공 응답]
+```
 

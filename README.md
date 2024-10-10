@@ -109,7 +109,7 @@ https://github.com/users/Saru-github/projects/1
 <h4>시퀀스 다이어그램</h4>
 </summary>
 <div markdown="1">
-https://github.com/Saru-github/hhplus-concert-booking/blob/Step5/sequence_diagram.md
+https://github.com/Saru-github/hhplus-concert-booking/blob/step6/docs/sequence_diagram.md
 </div>
 </details>
 
@@ -118,7 +118,7 @@ https://github.com/Saru-github/hhplus-concert-booking/blob/Step5/sequence_diagra
 <h4>플로우 차트</h4>
 </summary>
 <div markdown="1">
-https://github.com/Saru-github/hhplus-concert-booking/blob/Step5/flow_chart.md
+https://github.com/Saru-github/hhplus-concert-booking/blob/step6/docs/flow_chart.md
 </div>
 </details>
 
@@ -129,24 +129,16 @@ https://github.com/Saru-github/hhplus-concert-booking/blob/Step5/flow_chart.md
 <h4>ERD</h4>
 </summary>
 <div markdown="1">
-ERD
+https://github.com/Saru-github/hhplus-concert-booking/blob/step6/docs/ERD.md
 </div>
 </details>
 
 <details>
 <summary>
-<h4>API 명세 및 MockAPI</h4>
+<h4>API 명세 및 MockAPI, 패키지구조 등</h4>
 </summary>
 <div markdown="1">
-API 명세 및 MockAPI
+https://github.com/Saru-github/hhplus-concert-booking/blob/step6/docs/API.md
 </div>
 </details>
 
-<details>
-<summary>
-<h4>채택할 패키지 구조 및 기술스택 등</h4>
-</summary>
-<div markdown="1">
-채택할 패키지 구조 및 기술스택 등
-</div>
-</details>

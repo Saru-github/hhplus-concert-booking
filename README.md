@@ -100,7 +100,7 @@
 <h4>마일스톤</h4>
 </summary>
 <div markdown="1">
-마일스톤
+https://github.com/users/Saru-github/projects/1
 </div>
 </details>
 
@@ -109,7 +109,7 @@
 <h4>시퀀스 다이어그램</h4>
 </summary>
 <div markdown="1">
-시퀀스 다이어그램
+https://github.com/Saru-github/hhplus-concert-booking/blob/Step5/sequence_diagram.md
 </div>
 </details>
 
@@ -118,7 +118,7 @@
 <h4>플로우 차트</h4>
 </summary>
 <div markdown="1">
-플로우 차트
+https://github.com/Saru-github/hhplus-concert-booking/blob/Step5/flow_chart.md
 </div>
 </details>
 

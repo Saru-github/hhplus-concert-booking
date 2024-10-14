@@ -1,7 +1,8 @@
-package hhplus.booking.interfaces.user;
+package hhplus.booking.app.user.interfaces.api;
 
-import hhplus.booking.interfaces.user.dto.UserQueueInfo;
-import hhplus.booking.interfaces.user.dto.UserTokenInfo;
+import hhplus.booking.app.user.application.UserService;
+import hhplus.booking.app.user.interfaces.api.dto.UserQueueInfo;
+import hhplus.booking.app.user.interfaces.api.dto.UserTokenInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,19 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/booking/user")
 public class UserController {
 
-
-    @PostMapping("/{userId}/token")
-    public ResponseEntity<UserTokenInfo.Output> getUserTokenInfo (
-            @PathVariable ("userId") Long userId) {
-
-        return ResponseEntity.ok(new UserTokenInfo.Output("abcd1234efgh5678"));
-    }
+    private final UserService userService;
 
     @GetMapping("/{userId}/queue")
     public ResponseEntity<UserQueueInfo.Output> getUserQueueRank(
-            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
             @PathVariable("userId") Long userId) {
 
-        return ResponseEntity.ok(new UserQueueInfo.Output(1L, 1200L));
+        UserQueueInfo.Output userQueueInfo = userService.getUserQueueRank(new UserQueueInfo.Input(new UserTokenInfo(authorizationHeader, userId)));
+
+        return ResponseEntity.ok()
+                .header(userQueueInfo.userTokenInfo().tokenValue())
+                .body(userQueueInfo);
     }
 }

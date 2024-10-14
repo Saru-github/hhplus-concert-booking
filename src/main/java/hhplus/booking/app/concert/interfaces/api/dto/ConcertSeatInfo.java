@@ -1,4 +1,4 @@
-package hhplus.booking.interfaces.concert.dto;
+package hhplus.booking.app.concert.interfaces.api.dto;
 
 public class ConcertSeatInfo {
     public record Input(Long concertScheduleId) {}

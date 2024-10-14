@@ -1,9 +1,14 @@
-package hhplus.booking.interfaces.booking;
+package hhplus.booking.app.booking.interfaces.api;
 
-import hhplus.booking.interfaces.booking.dto.CreateBookingInfo;
+import hhplus.booking.app.booking.interfaces.api.dto.CreateBookingInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 

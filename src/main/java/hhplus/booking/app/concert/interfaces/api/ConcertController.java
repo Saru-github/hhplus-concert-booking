@@ -1,7 +1,7 @@
-package hhplus.booking.interfaces.concert;
+package hhplus.booking.app.concert.interfaces.api;
 
-import hhplus.booking.interfaces.concert.dto.ConcertDateInfo;
-import hhplus.booking.interfaces.concert.dto.ConcertSeatInfo;
+import hhplus.booking.app.concert.interfaces.api.dto.ConcertDateInfo;
+import hhplus.booking.app.concert.interfaces.api.dto.ConcertSeatInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

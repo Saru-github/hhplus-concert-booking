@@ -1,6 +1,4 @@
-package hhplus.booking.interfaces.concert.dto;
-
-import java.time.LocalDate;
+package hhplus.booking.app.concert.interfaces.api.dto;
 
 public class ConcertDateInfo {
     public record Input() {}

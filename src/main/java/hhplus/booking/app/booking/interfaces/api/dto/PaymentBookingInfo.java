@@ -1,4 +1,4 @@
-package hhplus.booking.interfaces.booking.dto;
+package hhplus.booking.app.booking.interfaces.api.dto;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;

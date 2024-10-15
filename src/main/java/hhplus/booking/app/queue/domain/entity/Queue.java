@@ -34,7 +34,7 @@ public class Queue extends BaseTimeEntity {
         this.expiredAt = this.expiredAt == null ? LocalDateTime.now().plusMinutes(1) : this.expiredAt;
     }
 
-    public static Queue of(String tokenValue) {
+    public static Queue from(String tokenValue) {
         return Queue.builder()
                 .tokenValue(tokenValue)
                 .build();
@@ -42,6 +42,14 @@ public class Queue extends BaseTimeEntity {
 
     @Builder
     public Queue(String tokenValue, String status, LocalDateTime expiredAt) {
+        this.tokenValue = tokenValue;
+        this.status = status;
+        this.expiredAt = expiredAt;
+    }
+
+    public Queue(Long queueId, String tokenValue, String status, LocalDateTime expiredAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(createdAt, updatedAt);
+        this.queueId = queueId;
         this.tokenValue = tokenValue;
         this.status = status;
         this.expiredAt = expiredAt;

@@ -3,7 +3,6 @@ package hhplus.booking.app.queue.infra;
 import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
 import hhplus.booking.app.queue.infra.jpa.QueueJpaRepository;
-import hhplus.booking.app.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +18,7 @@ public class QueueRepositoryImpl implements QueueRepository {
     @Override
     public String registerQueue() {
         String queueTokenValue = UUID.randomUUID().toString();
-        userJpaRepository.save(Queue.of(queueTokenValue));
+        userJpaRepository.save(Queue.from(queueTokenValue));
         return queueTokenValue;
     }
 

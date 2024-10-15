@@ -19,15 +19,4 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/{userId}/queue")
-    public ResponseEntity<UserQueueInfo.Output> getUserQueueRank(
-            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
-            @PathVariable("userId") Long userId) {
-
-        UserQueueInfo.Output userQueueInfo = userService.getUserQueueRank(new UserQueueInfo.Input(new UserTokenInfo(authorizationHeader, userId)));
-
-        return ResponseEntity.ok()
-                .header(userQueueInfo.userTokenInfo().tokenValue())
-                .body(userQueueInfo);
-    }
 }

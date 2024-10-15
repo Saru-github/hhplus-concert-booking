@@ -12,9 +12,4 @@ import org.springframework.stereotype.Repository;
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserJpaRepository userJpaRepository;
-
-    @Override
-    public User getUser(Long userId) {
-        return userJpaRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("아이디 없음"));
-    }
 }

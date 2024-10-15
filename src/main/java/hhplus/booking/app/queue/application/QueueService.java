@@ -5,6 +5,7 @@ import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -16,6 +17,7 @@ public class QueueService {
 
     private final QueueRepository queueRepository;
 
+    @Transactional
     public QueueInfo.Output getQueueInfo(QueueInfo.Input input) {
 
         String tokenValue = input.authorizationHeader();

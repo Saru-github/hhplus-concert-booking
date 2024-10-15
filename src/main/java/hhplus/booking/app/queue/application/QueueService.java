@@ -16,7 +16,7 @@ public class QueueService {
 
     private final QueueRepository queueRepository;
 
-    public QueueInfo.Output getUserQueueRank(QueueInfo.Input input) {
+    public QueueInfo.Output getQueueInfo(QueueInfo.Input input) {
 
         String tokenValue = input.authorizationHeader();
 
@@ -31,11 +31,12 @@ public class QueueService {
         long rank = 0;
 
         if ("WAITING".equals(queue.getStatus())) {
-            queue.refreshExpiration();
             rank = queueRepository.findWaitingQueues(queue).stream()
                     .sorted(Comparator.comparing(Queue::getCreatedAt))
                     .toList()
                     .indexOf(queue) + 1;
+
+            queue.refreshExpiration();
         }
 
         return QueueInfo.Output.builder().

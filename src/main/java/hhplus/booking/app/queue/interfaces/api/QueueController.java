@@ -21,6 +21,6 @@ public class QueueController {
     public ResponseEntity<QueueInfo.Output> getUserQueueRank(
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader
     ) {
-        return ResponseEntity.ok(queueService.getUserQueueRank(new QueueInfo.Input(authorizationHeader)));
+        return ResponseEntity.ok(queueService.getQueueInfo(new QueueInfo.Input(authorizationHeader)));
     }
 }

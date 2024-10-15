@@ -1,8 +1,9 @@
 package hhplus.booking.app.queue.application.dto;
 
-import hhplus.booking.app.user.interfaces.api.dto.UserTokenInfo;
+import lombok.Builder;
 
 public class QueueInfo {
     public record Input(String authorizationHeader) {}
-    public record Output(UserTokenInfo userTokenInfo, Long queueRank) {}
+    @Builder
+    public record Output(Long queueId, String tokenValue, Long rank, String status) {}
 }

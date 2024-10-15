@@ -2,7 +2,7 @@ package hhplus.booking.app.queue.interfaces.api;
 
 import hhplus.booking.app.queue.application.QueueService;
 import hhplus.booking.app.queue.application.dto.QueueInfo;
-import hhplus.booking.app.queue.interfaces.api.dto.UserTokenInfo;
+import hhplus.booking.app.queue.domain.entity.Queue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +21,6 @@ public class QueueController {
     public ResponseEntity<QueueInfo.Output> getUserQueueRank(
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader
     ) {
-
         return ResponseEntity.ok(queueService.getUserQueueRank(new QueueInfo.Input(authorizationHeader)));
     }
 }

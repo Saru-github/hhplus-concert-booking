@@ -5,35 +5,49 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "\"user\"")
+@Table(name = "queue")
 public class Queue extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long queueId;
 
-    private String userName;
+    private String tokenValue;
+    private String status;
+    private LocalDateTime expiredAt;
 
+    @PrePersist
+    public void prePersist() {
+        this.status = this.status == null ? "WAITING" : this.status;
+        this.expiredAt = this.expiredAt == null ? LocalDateTime.now().plusMinutes(1) : this.expiredAt;
+    }
 
-    public static Queue of(Long userId, String userName) {
+    public static Queue of(String tokenValue) {
         return Queue.builder()
-                .userId(userId)
-                .userName(userName)
+                .tokenValue(tokenValue)
                 .build();
     }
 
     @Builder
-    public Queue(Long userId, String userName) {
-        this.userId = userId;
-        this.userName = userName;
+    public Queue(String tokenValue, String status, LocalDateTime expiredAt) {
+        this.tokenValue = tokenValue;
+        this.status = status;
+        this.expiredAt = expiredAt;
+    }
+
+    public void refreshExpiration() {
+        this.expiredAt = LocalDateTime.now();
     }
 }

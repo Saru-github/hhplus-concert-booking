@@ -5,11 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -23,17 +26,27 @@ public class User extends BaseTimeEntity {
 
     private String userName;
 
+    private Long balance;
 
-    public static User of(Long userId, String userName) {
+    @PrePersist
+    public void prePersist() {
+        this.balance = this.balance == null ? 0L : this.balance;
+    }
+
+    public static User of(String userName) {
         return User.builder()
-                .userId(userId)
                 .userName(userName)
                 .build();
     }
 
     @Builder
-    public User(Long userId, String userName) {
+    public User(Long userId, String userName, Long balance) {
         this.userId = userId;
         this.userName = userName;
+        this.balance = balance;
+    }
+
+    public void chargePoints(Long amount) {
+        this.balance += amount;
     }
 }

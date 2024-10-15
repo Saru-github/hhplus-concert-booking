@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class QueueServiceTest {
 
     @Spy
     private BcryptEncryptor bcryptEncryptor; // Spring 컨텍스트에서 주입

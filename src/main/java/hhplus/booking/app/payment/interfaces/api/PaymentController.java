@@ -1,6 +1,6 @@
-package hhplus.booking.app.point.interfaces.api;
+package hhplus.booking.app.payment.interfaces.api;
 
-import hhplus.booking.app.point.interfaces.api.dto.PointInfo;
+import hhplus.booking.app.payment.interfaces.api.dto.PaymentInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/points")
-public class PointController {
+public class PaymentController {
 
     @GetMapping("/{userId}")
-    public ResponseEntity<PointInfo.Output> getUserPoint(
+    public ResponseEntity<PaymentInfo.Output> getUserPoint(
             @RequestHeader("Authorization") String authorizationHeader,
-            @RequestBody PointInfo.Input input) {
+            @RequestBody PaymentInfo.Input input) {
 
-        return ResponseEntity.ok(PointInfo.Output.builder()
+        return ResponseEntity.ok(PaymentInfo.Output.builder()
                 .pointId(1L)
                 .userId(1L)
                 .balance(10000L)
@@ -28,11 +28,11 @@ public class PointController {
     }
 
     @PutMapping("/{userId}/charge")
-    public ResponseEntity<PointInfo.Output> chargePoints(
+    public ResponseEntity<PaymentInfo.Output> chargePoints(
             @RequestHeader("Authorization") String authorizationHeader,
-            @RequestBody PointInfo.Input input) {
+            @RequestBody PaymentInfo.Input input) {
 
-        return ResponseEntity.ok(PointInfo.Output.builder()
+        return ResponseEntity.ok(PaymentInfo.Output.builder()
                         .pointId(1L)
                         .userId(1L)
                         .balance(10000L)

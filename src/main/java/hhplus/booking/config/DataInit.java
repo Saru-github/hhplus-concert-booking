@@ -41,7 +41,7 @@ public class DataInit implements ApplicationRunner {
 
         for (long scheduleId = 1L; scheduleId <= 9L; scheduleId++) {
             for (long seatNumber = 1; seatNumber <= 50; seatNumber++) {
-                concertSeatJpaRepository.save(new ConcertSeat(null, scheduleId, seatNumber, 50000L));
+                concertSeatJpaRepository.save(new ConcertSeat(null, scheduleId, seatNumber, 50000L, "AVAILABLE"));
             }
         }
 
@@ -66,7 +66,7 @@ public class DataInit implements ApplicationRunner {
         // 각 콘서트 스케줄마다 50개의 좌석을 생성
         for (long scheduleId = 1L; scheduleId <= 9L; scheduleId++) {
             for (long seatNumber = 1; seatNumber <= 50; seatNumber++) {
-                concertSeatJpaRepository.save(new ConcertSeat(null, scheduleId, seatNumber, 50000L));
+                concertSeatJpaRepository.save(new ConcertSeat(null, scheduleId, seatNumber, 50000L, "AVAILABLE"));
             }
         }
     }

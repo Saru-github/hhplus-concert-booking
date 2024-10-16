@@ -26,15 +26,24 @@ public class UserController {
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
             @PathVariable("userId") Long userId
     ) {
-        return ResponseEntity.ok(userService.getUserPoints(new UserPointInfo.Input(userId, 0L)));
+        return ResponseEntity.ok(userService.getUserPoints(new UserPointInfo.Input(userId, null)));
     }
 
-    @PutMapping("/{userId}/points")
+    @PutMapping("/{userId}/points/charge")
     public ResponseEntity<UserPointInfo.Output> chargeUserPoints(
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
             @PathVariable("userId") Long userId,
             @RequestBody Long amount
     ) {
         return ResponseEntity.ok(userService.chargeUserPoints(new UserPointInfo.Input(userId, amount)));
+    }
+
+    @PutMapping("/{userId}/points/use")
+    public ResponseEntity<UserPointInfo.Output> useUserPoints(
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
+            @PathVariable("userId") Long userId,
+            @RequestBody Long amount
+    ) {
+        return ResponseEntity.ok(userService.useUserPoints(new UserPointInfo.Input(userId, amount)));
     }
 }

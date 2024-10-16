@@ -49,4 +49,14 @@ public class User extends BaseTimeEntity {
     public void chargePoints(Long amount) {
         this.balance += amount;
     }
+
+    public void usePoints(Long amount) {
+        long remainingBalance = this.balance - amount;
+
+        if (0 > remainingBalance) {
+            throw new IllegalStateException("남은 잔액이 부족합니다.");
+        }
+
+        this.balance = remainingBalance;
+    }
 }

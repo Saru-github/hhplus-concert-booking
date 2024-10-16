@@ -26,4 +26,11 @@ public class UserService {
         return new UserPointInfo.Output(user);
     }
 
+    @Transactional
+    public UserPointInfo.Output useUserPoints(UserPointInfo.Input input) {
+
+        User user = userRepository.getUser(input.userId());
+        user.usePoints(input.amount());
+        return new UserPointInfo.Output(user);
+    }
 }

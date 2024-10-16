@@ -39,13 +39,7 @@ public class DataInit implements ApplicationRunner {
             queueJpaRepository.save(Queue.from(UUID.randomUUID().toString()));
         }
 
-        for (long scheduleId = 1L; scheduleId <= 9L; scheduleId++) {
-            for (long seatNumber = 1; seatNumber <= 50; seatNumber++) {
-                concertSeatJpaRepository.save(new ConcertSeat(null, scheduleId, seatNumber, 50000L, "AVAILABLE"));
-            }
-        }
-
-        userJpaRepository.save(User.of("유저1"));
+        userJpaRepository.save(new User(1L, "유저1", 100000L));
         userJpaRepository.save(new User(2L, "유저2", 100000L));
         userJpaRepository.save(new User(3L, "유저3", 100000L));
 
@@ -66,7 +60,8 @@ public class DataInit implements ApplicationRunner {
         // 각 콘서트 스케줄마다 50개의 좌석을 생성
         for (long scheduleId = 1L; scheduleId <= 9L; scheduleId++) {
             for (long seatNumber = 1; seatNumber <= 50; seatNumber++) {
-                concertSeatJpaRepository.save(new ConcertSeat(null, scheduleId, seatNumber, 50000L, "AVAILABLE"));
+                String status = (seatNumber <= 10) ? "BOOKED" : "AVAILABLE";
+                concertSeatJpaRepository.save(new ConcertSeat(null, scheduleId, seatNumber, 50000L, status));
             }
         }
     }

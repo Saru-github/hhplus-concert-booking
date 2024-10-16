@@ -13,24 +13,28 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class QueueRepositoryImpl implements QueueRepository {
 
-    private final QueueJpaRepository userJpaRepository;
+    private final QueueJpaRepository queueJpaRepository;
 
     @Override
     public String registerQueue() {
         String queueTokenValue = UUID.randomUUID().toString();
-        userJpaRepository.save(Queue.from(queueTokenValue));
+        queueJpaRepository.save(Queue.from(queueTokenValue));
         return queueTokenValue;
     }
 
     @Override
     public Queue getQueue(String tokenValue) {
-        return userJpaRepository.findByTokenValue(tokenValue)
-                .orElseGet(() -> userJpaRepository.findByTokenValue(registerQueue()).orElseThrow());
+        return queueJpaRepository.findByTokenValue(tokenValue).orElse(Queue.from(registerQueue()));
     }
 
 
     @Override
-    public List<Queue> findWaitingQueues(Queue queue) {
-        return userJpaRepository.findWaitingQueues(queue.getStatus());
+    public List<Queue> findWaitingQueues(String status) {
+        return queueJpaRepository.findWaitingQueues(status);
+    }
+
+    @Override
+    public void deleteQueue(Long queueId) {
+        queueJpaRepository.deleteByQueueId(queueId);
     }
 }

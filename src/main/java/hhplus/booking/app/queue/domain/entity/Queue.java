@@ -58,7 +58,13 @@ public class Queue extends BaseTimeEntity {
     public void refreshExpiration() {
         this.expiredAt = LocalDateTime.now();
     }
+
     public void enterProcessing() {
         this.status = "WAITING".equals(this.status) ? "PROCESSING" : this.status;
+    }
+
+    public void expireQueue() {
+        this.expiredAt = LocalDateTime.now();
+        this.status = "COMPLETED";
     }
 }

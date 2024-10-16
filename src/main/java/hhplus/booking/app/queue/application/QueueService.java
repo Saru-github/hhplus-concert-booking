@@ -33,10 +33,9 @@ public class QueueService {
         long rank = 0;
 
         if ("WAITING".equals(queue.getStatus())) {
-            rank = queueRepository.findWaitingQueues(queue).stream()
-                    .sorted(Comparator.comparing(Queue::getCreatedAt))
-                    .toList()
-                    .indexOf(queue) + 1;
+            List<Queue> waitingQueues = queueRepository.findWaitingQueues(queue.getStatus());
+
+            rank = waitingQueues.indexOf(queue) + 1;
 
             queue.refreshExpiration();
         }

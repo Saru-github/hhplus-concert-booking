@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class QueueServiceTest {
+class QueueServiceIntegrationTest {
 
     @Autowired
     private QueueService queueService;
@@ -36,8 +36,8 @@ class QueueServiceTest {
 
         // 초기 Queue 데이터 설정
         for (int i = 1; i <= 40; i++) {
-            Queue mockQueue = new Queue((long) i, "tokenValue" + i, "WAITING", LocalDateTime.now().plusMinutes(1), LocalDateTime.now(), LocalDateTime.now());
-            queueRepository.save(mockQueue);
+            Queue queue = new Queue((long) i, "tokenValue" + i, "WAITING", LocalDateTime.now().plusMinutes(1), LocalDateTime.now(), LocalDateTime.now());
+            queueRepository.save(queue);
         }
 
         // When
@@ -70,9 +70,10 @@ class QueueServiceTest {
 
         // 결과 확인
         assertThat(results).hasSize(40); // 총 40개의 결과가 있어야 함
+        results.forEach(System.out::println);
         // 추가 검증: 순서가 올바르게 보장되었는지 확인
         for (int i = 0; i < results.size(); i++) {
-            assertThat(results.get(i).rank()).isEqualTo(i + 1); // rank가 1부터 시작해야 함
+            assertThat(results.get(i).rank()).isEqualTo(i + 1); // rank가 0부터 시작해야 함
         }
     }
 }

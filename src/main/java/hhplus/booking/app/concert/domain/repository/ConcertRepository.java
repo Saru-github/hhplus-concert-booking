@@ -7,7 +7,9 @@ import hhplus.booking.app.concert.domain.entity.ConcertSeat;
 import java.util.List;
 
 public interface ConcertRepository {
+    ConcertSeat getConcertSeat(Long concertSeatId);
     List<ConcertSchedule> getConcertSchedules(Long concertId);
-    List<ConcertSeat> getConcertSeats(Long concertScheduleId);
+    List<ConcertSeat> getAvailableConcertSeats(Long concertScheduleId);
     ConcertBooking bookConcertSeat(Long userId, Long concertSeatId);
+    ConcertBooking getConcertBooking(Long concertBooingId);
 }

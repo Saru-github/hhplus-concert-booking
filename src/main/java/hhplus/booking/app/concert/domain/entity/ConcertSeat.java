@@ -6,12 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -31,6 +30,9 @@ public class ConcertSeat extends BaseTimeEntity {
 
     private String status;
 
+    @Version
+    private Long version; // 낙관적 잠금을 위한 필드
+
     public static ConcertSeat of(Long concertScheduleId, Long seatNumber, Long price, String status) {
         return ConcertSeat.builder()
                 .concertScheduleId(concertScheduleId)
@@ -47,5 +49,15 @@ public class ConcertSeat extends BaseTimeEntity {
         this.seatNumber = seatNumber;
         this.price = price;
         this.status = status;
+    }
+
+    public void validAvailableSeat() {
+        if (!"AVAILABLE".equals(this.status)) {
+            throw new IllegalStateException("예약이 불가능한 좌석 입니다.");
+        }
+    }
+
+    public void updateSeatStatusToBooked() {
+        this.status = "BOOKED";
     }
 }

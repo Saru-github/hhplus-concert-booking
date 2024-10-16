@@ -31,7 +31,7 @@ public class ConcertController {
             @RequestParam("concertId") Long concertId
     ) {
 
-        return ResponseEntity.ok(concertService.getConcertScheduleInfo(new ConcertScheduleInfo.Input(concertId)));
+        return ResponseEntity.ok(concertService.getConcertScheduleInfos(new ConcertScheduleInfo.Input(concertId)));
     }
 
     @GetMapping("/seats")
@@ -40,7 +40,7 @@ public class ConcertController {
             @RequestParam("concertScheduleId") Long concertScheduleId
     ) {
 
-        return ResponseEntity.ok(concertService.getConcertSeatInfo(new ConcertSeatInfo.Input(concertScheduleId)));
+        return ResponseEntity.ok(concertService.getAvailableConcertSeatInfos(new ConcertSeatInfo.Input(concertScheduleId)));
     }
 
     @PostMapping("/booking")

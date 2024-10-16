@@ -21,17 +21,27 @@ public class ConcertRepositoryImpl implements ConcertRepository {
     private final ConcertBookingJpaRepository concertBookingJpaRepository;
 
     @Override
-    public List<ConcertSchedule> getConcertSchedule(Long concertId) {
+    public ConcertSeat getConcertSeat(Long concertSeatId) {
+        return concertSeatJpaRepository.findById(concertSeatId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 좌석입니다."));
+    }
+
+    @Override
+    public List<ConcertSchedule> getConcertSchedules(Long concertId) {
         return concertScheduleJpaRepository.findAllByConcertId(concertId);
     }
 
     @Override
-    public List<ConcertSeat> getConcertSeats(Long concertScheduleId) {
-        return concertSeatJpaRepository.findAllByConcertScheduleId(concertScheduleId);
+    public List<ConcertSeat> getAvailableConcertSeats(Long concertScheduleId) {
+        return concertSeatJpaRepository.findAllByConcertScheduleIdAndStatus(concertScheduleId, "AVAILABLE");
     }
 
     @Override
     public ConcertBooking bookConcertSeat(Long userId, Long concertSeatId) {
         return concertBookingJpaRepository.save(ConcertBooking.of(userId, concertSeatId));
+    }
+
+    @Override
+    public ConcertBooking getConcertBooking(Long concertBooingId) {
+        return concertBookingJpaRepository.findById(concertBooingId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약번호입니다."));
     }
 }

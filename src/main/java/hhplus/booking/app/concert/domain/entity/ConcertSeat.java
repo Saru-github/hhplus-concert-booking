@@ -29,19 +29,23 @@ public class ConcertSeat extends BaseTimeEntity {
 
     private Long price;
 
-    public static ConcertSeat of(Long concertScheduleId, Long seatNumber, Long price) {
+    private String status;
+
+    public static ConcertSeat of(Long concertScheduleId, Long seatNumber, Long price, String status) {
         return ConcertSeat.builder()
                 .concertScheduleId(concertScheduleId)
                 .seatNumber(seatNumber)
                 .price(price)
+                .status(status)
                 .build();
     }
 
     @Builder
-    public ConcertSeat(Long concertSeatId, Long concertScheduleId, Long seatNumber, Long price) {
+    public ConcertSeat(Long concertSeatId, Long concertScheduleId, Long seatNumber, Long price, String status) {
         this.concertSeatId = concertSeatId;
         this.concertScheduleId = concertScheduleId;
         this.seatNumber = seatNumber;
         this.price = price;
+        this.status = status;
     }
 }

@@ -110,12 +110,16 @@
 ![queue_unit.png](docs/img/queue_unit.png)
 
 #### IntegrationTest
+
 대기열 동시성 통합 테스트
+
 ![queue_integration_test.png](docs/img/queue_integration_test.png)
 
 
 #### PostManTest
+
 대기열 순번조회
+
 ![queue_postman.png](docs/img/queue_postman.png)
 
 ### Concert
@@ -124,35 +128,55 @@
 ![concert_unit.png](docs/img/concert_unit.png)
 
 #### IntegrationTest
+
 콘서트 예약 동시성 통합테스트
+
 ![concert_booking_integration.png](docs/img/concert_booking_integration.png)
 
 #### PostManTest
+
 콘서트 일정 조회
+
 ![concert_schedule_postman.png](docs/img/concert_schedule_postman.png)
+
 콘서트 좌석조회
+
 ![concert_seat_postman.png](docs/img/concert_seat_postman.png)
+
 콘서트 예약
+
 ![concert_booking_postman.png](docs/img/concert_booking_postman.png)
+
 ### User
 
 #### UnitTest
+
 ![user_unit.png](docs/img/user_unit.png)
 
 #### PostManTest
+
 유저 포인트 조회
+
 ![point_postman.png](docs/img/point_postman.png)
+
 유저 포인트 충전
+
 ![charge_postman.png](docs/img/charge_postman.png)
+
 유저 포인트 사용
+
 ![use_postman.png](docs/img/use_postman.png)
 
 ### Payment
 
 #### IntegrationTest
+
 결제 통합 테스트
+
 ![payment_integration_test.png](docs/img/payment_integration_test.png)
 
 #### PostmanTest
+
 결제 테스트
+
 ![payment_postman.png](docs/img/payment_postman.png)

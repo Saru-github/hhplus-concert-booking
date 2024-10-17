@@ -1,15 +1,15 @@
 package hhplus.booking.app.concert.application.Integration;
 
-import hhplus.booking.app.queue.application.QueueService;
-import hhplus.booking.app.queue.application.dto.QueueInfo;
-import hhplus.booking.app.queue.domain.entity.Queue;
-import hhplus.booking.app.queue.infra.jpa.QueueJpaRepository;
+import hhplus.booking.app.concert.application.ConcertService;
+import hhplus.booking.app.concert.application.dto.ConcertBookingInfo;
+import hhplus.booking.app.concert.domain.entity.ConcertBooking;
+import hhplus.booking.app.concert.infra.jpa.ConcertBookingJpaRepository;
+import hhplus.booking.app.concert.infra.jpa.ConcertSeatJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -21,34 +21,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ConcurrentConcertBookingIntegrationTest {
 
     @Autowired
-    private QueueService queueService;
+    private ConcertService concertService;
 
     @Autowired
-    private QueueJpaRepository queueRepository;
+    private ConcertBookingJpaRepository concertBookingJpaRepository;
 
     @Test
-    @DisplayName("40명이 동시에 대기열 조회 시 순서 보장 테스트")
+    @DisplayName("10명이 동시에 좌석 신청 1번만 예약 보장 테스트")
     void testPaymentUseCaseTest() throws Exception {
 
         // Given
-        List<CompletableFuture<QueueInfo.Output>> futures = new ArrayList<>();
-        AtomicLong exceptionCount = new AtomicLong(0L);
-
-        // 초기 Queue 데이터 설정
-        for (int i = 1; i <= 40; i++) {
-            Queue queue = new Queue((long) i, "tokenValue" + i, "WAITING", LocalDateTime.now().plusMinutes(1), LocalDateTime.now(), LocalDateTime.now());
-            queueRepository.save(queue);
-        }
+        List<CompletableFuture<ConcertBookingInfo.Output>> futures = new ArrayList<>();
+        AtomicLong atomicExceptionCount = new AtomicLong(0L);
+        AtomicLong atomicSuccessUserId = new AtomicLong();
 
         // When
-        for (int i = 1; i <= 40; i++) {
-            int finalI = i;
-            CompletableFuture<QueueInfo.Output> future = CompletableFuture.supplyAsync(() -> {
+        for (int i = 11; i <= 20; i++) {
+            long finalI = i;
+            CompletableFuture<ConcertBookingInfo.Output> future = CompletableFuture.supplyAsync(() -> {
                 try {
-                    QueueInfo.Input input = new QueueInfo.Input("Bearer tokenValue" + finalI);
-                    return queueService.getQueueInfo(input);
+                    ConcertBookingInfo.Input input = new ConcertBookingInfo.Input(finalI, 11L);
+                    ConcertBookingInfo.Output output =  concertService.bookConcertSeat(input);
+                    atomicSuccessUserId.set(finalI);
+                    return output;
+
                 } catch (Exception e) {
-                    exceptionCount.getAndIncrement();
+                    atomicExceptionCount.getAndIncrement();
                     return null;
                 }
             });
@@ -60,20 +58,22 @@ class ConcurrentConcertBookingIntegrationTest {
         allOf.get();
 
         // Then
-        List<QueueInfo.Output> results = new ArrayList<>();
-        for (CompletableFuture<QueueInfo.Output> future : futures) {
-            QueueInfo.Output output = future.join();
+        List<ConcertBookingInfo.Output> results = new ArrayList<>();
+        for (CompletableFuture<ConcertBookingInfo.Output> future : futures) {
+            ConcertBookingInfo.Output output = future.join();
             if (output != null) {
                 results.add(output);
             }
         }
 
+        ConcertBooking concertBooking = concertBookingJpaRepository.findById(results.get(0).concertBookingId()).orElseThrow();
+
+        long userId = atomicSuccessUserId.get();
+        long exceptionCount = atomicExceptionCount.get();
+
         // 결과 확인
-        assertThat(results).hasSize(40); // 총 40개의 결과가 있어야 함
-        results.forEach(System.out::println);
-        // 추가 검증: 순서가 올바르게 보장되었는지 확인
-        for (int i = 0; i < results.size(); i++) {
-            assertThat(results.get(i).rank()).isEqualTo(i + 1); // rank가 0부터 시작해야 함
-        }
+        assertThat(results).hasSize(1);
+        assertThat(exceptionCount).isEqualTo(9);
+        assertThat(concertBooking.getUserId()).isEqualTo(userId);
     }
 }

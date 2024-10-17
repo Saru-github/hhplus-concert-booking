@@ -24,33 +24,29 @@ public class Payment extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
 
-    private Long userId;
-
-    private Long concertSeatId;
+    private Long concertBookingId;
 
     private Long paymentAmount;
 
 
     public static Payment of(
-            Long userId,
-            Long concertSeatId,
+            Long concertBookingId,
             Long paymentAmount
     ) {
         return Payment.builder()
-                .userId(userId)
-                .concertSeatId(concertSeatId)
+                .concertBookingId(concertBookingId)
                 .paymentAmount(paymentAmount)
                 .build();
     }
 
     @Builder
     public Payment(
-            Long userId,
-            Long concertSeatId,
+            Long paymentId,
+            Long concertBookingId,
             Long paymentAmount
     ) {
-        this.userId = userId;
-        this.concertSeatId = concertSeatId;
+        this.paymentId = paymentId;
+        this.concertBookingId = concertBookingId;
         this.paymentAmount = paymentAmount;
     }
 }

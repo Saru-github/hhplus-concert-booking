@@ -20,7 +20,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 
 
     @Override
-    public Payment savePayment(Long userId, Long concertSeatId, Long price) {
-        return paymentJpaRepository.save(Payment.of(userId, concertSeatId, price));
+    public Payment savePayment(Long concertBookingId, Long price) {
+        return paymentJpaRepository.save(Payment.of(concertBookingId, price));
     }
 }

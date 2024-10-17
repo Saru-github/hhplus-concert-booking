@@ -1,4 +1,4 @@
-package hhplus.booking.app.payment.application.Integration;
+package hhplus.booking.app.concert.application.Integration;
 
 import hhplus.booking.app.queue.application.QueueService;
 import hhplus.booking.app.queue.application.dto.QueueInfo;
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class PaymentUseCaseTest {
+class ConcurrentConcertBookingIntegrationTest {
 
     @Autowired
     private QueueService queueService;

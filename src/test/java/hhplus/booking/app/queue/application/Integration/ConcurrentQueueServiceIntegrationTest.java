@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class ConcurrentQueueServiceTest {
+class ConcurrentQueueServiceIntegrationTest {
 
     @Autowired
     private QueueService queueService;

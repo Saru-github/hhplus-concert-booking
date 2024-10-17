@@ -1,4 +1,4 @@
-package hhplus.booking.app.queue.application.Integration;
+package hhplus.booking.app.payment.application.Integration;
 
 import hhplus.booking.app.queue.application.QueueService;
 import hhplus.booking.app.queue.application.dto.QueueInfo;
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class QueueServiceIntegrationTest {
+class PaymentUseCaseIntegrationTest {
 
     @Autowired
     private QueueService queueService;
@@ -28,7 +28,7 @@ class QueueServiceIntegrationTest {
 
     @Test
     @DisplayName("40명이 동시에 대기열 조회 시 순서 보장 테스트")
-    void testConcurrentQueueInfo() throws Exception {
+    void testPaymentUseCaseTest() throws Exception {
 
         // Given
         List<CompletableFuture<QueueInfo.Output>> futures = new ArrayList<>();

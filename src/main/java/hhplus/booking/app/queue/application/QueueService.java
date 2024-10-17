@@ -40,8 +40,8 @@ public class QueueService {
             queue.refreshExpiration();
         }
 
-        return QueueInfo.Output.builder().
-                queueId(queue.getQueueId())
+        return QueueInfo.Output.builder()
+                .queueId(queue.getQueueId())
                 .tokenValue(queue.getTokenValue())
                 .rank(rank)
                 .status(queue.getStatus())

@@ -18,7 +18,7 @@ public interface UserControllerDocs {
             @ApiResponse(responseCode = "200", description = "유저 정보 및 포인트 정상 반환")
     })
     public ResponseEntity<UserPointInfo.Output> getUserPoints(
-            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
+            @RequestHeader(value = "Authorization") String authorizationHeader,
             @PathVariable("userId") Long userId
     );
 
@@ -27,7 +27,7 @@ public interface UserControllerDocs {
             @ApiResponse(responseCode = "200", description = "유저 정보 및 충전된 포인트 정상 반환"),
     })
     public ResponseEntity<UserPointInfo.Output> chargeUserPoints(
-            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
+            @RequestHeader(value = "Authorization") String authorizationHeader,
             @PathVariable("userId") Long userId,
             @RequestBody Long amount
     );
@@ -37,7 +37,7 @@ public interface UserControllerDocs {
             @ApiResponse(responseCode = "200", description = "유저 정보 및 사용된 포인트 정상 반환"),
     })
     public ResponseEntity<UserPointInfo.Output> useUserPoints(
-            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
+            @RequestHeader(value = "Authorization") String authorizationHeader,
             @PathVariable("userId") Long userId,
             @RequestBody Long amount
     );

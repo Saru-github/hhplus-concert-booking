@@ -99,3 +99,84 @@
 
 > DB Index , 대용량 처리를 위한 개선 포인트 등은 추후 챕터에서 진행하므로 목표는 `기능 개발의 완료` 로 합니다. 최적화 작업 등을 고려하는 것 보다 모든 기능을 정상적으로 제공할 수 있도록 해주세요. 특정 기능을 왜 이렇게 개발하였는지 합당한 이유와 함께 기능 개발을 진행해주시면 됩니다.
 >
+
+
+## 단위테스트, 통합테스트, POSTMAN 테스트 결과
+
+
+### Queue
+
+#### UnitTest
+![queue_unit.png](docs/img/queue_unit.png)
+
+#### IntegrationTest
+
+대기열 동시성 통합 테스트
+
+![queue_integration_test.png](docs/img/queue_integration_test.png)
+
+
+#### PostManTest
+
+대기열 순번조회
+
+![queue_postman.png](docs/img/queue_postman.png)
+
+### Concert
+
+#### UnitTest
+![concert_unit.png](docs/img/concert_unit.png)
+
+#### IntegrationTest
+
+콘서트 예약 동시성 통합테스트
+
+![concert_booking_integration.png](docs/img/concert_booking_integration.png)
+
+#### PostManTest
+
+콘서트 일정 조회
+
+![concert_schedule_postman.png](docs/img/concert_schedule_postman.png)
+
+콘서트 좌석조회
+
+![concert_seat_postman.png](docs/img/concert_seat_postman.png)
+
+콘서트 예약
+
+![concert_booking_postman.png](docs/img/concert_booking_postman.png)
+
+### User
+
+#### UnitTest
+
+![user_unit.png](docs/img/user_unit.png)
+
+#### PostManTest
+
+유저 포인트 조회
+
+![point_postman.png](docs/img/point_postman.png)
+
+유저 포인트 충전
+
+![charge_postman.png](docs/img/charge_postman.png)
+
+유저 포인트 사용
+
+![use_postman.png](docs/img/use_postman.png)
+
+### Payment
+
+#### IntegrationTest
+
+결제 통합 테스트
+
+![payment_integration_test.png](docs/img/payment_integration_test.png)
+
+#### PostmanTest
+
+결제 테스트
+
+![payment_postman.png](docs/img/payment_postman.png)

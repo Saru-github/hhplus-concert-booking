@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/booking/queue")
-public class QueueController {
+public class QueueController implements QueueControllerDocs{
 
     private final QueueService queueService;
 

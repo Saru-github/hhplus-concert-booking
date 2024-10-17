@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/booking/user")
-public class UserController {
+public class UserController implements UserControllerDocs{
 
     private final UserService userService;
 

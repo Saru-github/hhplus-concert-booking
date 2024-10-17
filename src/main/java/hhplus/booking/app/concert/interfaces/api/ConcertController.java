@@ -21,12 +21,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/booking/concerts")
-public class ConcertController {
+public class ConcertController implements ConcertControllerDocs{
 
     private final ConcertService concertService;
 
     @GetMapping("/dates")
-    public ResponseEntity<List<ConcertScheduleInfo.Output>> getAvailableConcertDates(
+    public ResponseEntity<List<ConcertScheduleInfo.Output>> getConcertDates(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam("concertId") Long concertId
     ) {

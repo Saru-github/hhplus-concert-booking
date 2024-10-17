@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/booking/payments")
-public class PaymentController {
+public class PaymentController implements PaymentControllerDocs{
 
     private final PaymentUseCase paymentUseCase;
 

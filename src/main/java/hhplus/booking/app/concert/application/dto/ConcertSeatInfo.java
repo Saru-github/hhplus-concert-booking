@@ -1,11 +1,16 @@
 package hhplus.booking.app.concert.application.dto;
 
 import hhplus.booking.app.concert.domain.entity.ConcertSeat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 public class ConcertSeatInfo {
-    public record Input(Long concertScheduleId) {}
 
+    public record Input(
+            Long concertScheduleId
+    ) {}
+
+    @Schema(name = "ConcertSeatOutput")
     @Builder
     public record Output(
             Long concertSeatId,

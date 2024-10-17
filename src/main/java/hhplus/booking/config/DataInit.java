@@ -1,8 +1,10 @@
 package hhplus.booking.config;
 
 import hhplus.booking.app.concert.domain.entity.Concert;
+import hhplus.booking.app.concert.domain.entity.ConcertBooking;
 import hhplus.booking.app.concert.domain.entity.ConcertSchedule;
 import hhplus.booking.app.concert.domain.entity.ConcertSeat;
+import hhplus.booking.app.concert.infra.jpa.ConcertBookingJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertScheduleJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertSeatJpaRepository;
@@ -16,6 +18,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -27,6 +30,7 @@ public class DataInit implements ApplicationRunner {
     private final ConcertSeatJpaRepository concertSeatJpaRepository;
     private final UserJpaRepository userJpaRepository;
     private final QueueJpaRepository queueJpaRepository;
+    private final ConcertBookingJpaRepository concertBookingJpaRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -38,6 +42,8 @@ public class DataInit implements ApplicationRunner {
         for (int i = 10;  i < 50; i++) {
             queueJpaRepository.save(Queue.from(UUID.randomUUID().toString()));
         }
+
+        queueJpaRepository.save(Queue.from("TEST_UUID_TOKEN"));
 
         userJpaRepository.save(new User(1L, "유저1", 100000L));
         userJpaRepository.save(new User(2L, "유저2", 100000L));
@@ -64,5 +70,7 @@ public class DataInit implements ApplicationRunner {
                 concertSeatJpaRepository.save(new ConcertSeat(null, scheduleId, seatNumber, 50000L, status));
             }
         }
+
+        concertBookingJpaRepository.save(new ConcertBooking(2L, 1L, 1L, "COMPLETED", LocalDateTime.now()));
     }
 }

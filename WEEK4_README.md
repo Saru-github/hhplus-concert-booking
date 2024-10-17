@@ -109,6 +109,10 @@
 #### UnitTest
 ![queue_unit.png](docs/img/queue_unit.png)
 
+#### IntegrationTest
+대기열 동시성 통합 테스트
+![queue_integration_test.png](docs/img/queue_integration_test.png)
+
 
 #### PostManTest
 대기열 순번조회
@@ -120,7 +124,8 @@
 ![concert_unit.png](docs/img/concert_unit.png)
 
 #### IntegrationTest
-콘서트 예약 통합테스트
+콘서트 예약 동시성 통합테스트
+![concert_booking_integration.png](docs/img/concert_booking_integration.png)
 
 #### PostManTest
 콘서트 일정 조회
@@ -145,10 +150,9 @@
 ### Payment
 
 #### IntegrationTest
-
 결제 통합 테스트
+![payment_integration_test.png](docs/img/payment_integration_test.png)
 
 #### PostmanTest
-
 결제 테스트
 ![payment_postman.png](docs/img/payment_postman.png)

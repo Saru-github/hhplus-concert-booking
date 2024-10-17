@@ -78,6 +78,8 @@
 - 유저간 대기열을 요청 순서대로 정확하게 제공할 방법을 고민해 봅니다.
 - 동시에 여러 사용자가 예약 요청을 했을 때, 좌석이 중복으로 배정 가능하지 않도록 합니다.
 
+### 3주차 과제
+
 ### **`STEP 05`**
 
 - 시나리오 선정 및 프로젝트 Milestone 제출
@@ -93,8 +95,32 @@
 - API 명세 및 Mock API 작성
 - 자료들을 리드미에 작성 후 PR링크 제출 ( 채택할 기본 패키지 구조, 기술 스택 등 )
 
+### 4주차 과제
+
+### **`DEFAULT`**
+
+- 각 시나리오별 하기 **비즈니스 로직** 개발 및 **단위 테스트** 작성
+    - `e-commerce` : 상품 조회, 주문/결제 기능
+    - `concert` : 대기열 발급, 대기순번 조회, 좌석 예약 기능
+
+> **단위 테스트** 는 반드시 대상 객체/기능 에 대한 의존성만 존재해야 함
+> 
+
+### **`STEP07`**
+
+- API Swagger 기능 구현 및 캡쳐본 첨부 ( Readme )
+- 주요 비즈니스 로직 개발 및 단위 테스트 작성
+
+### **`STEP08`**
+
+- 비즈니스 Usecase 개발 및 통합 테스트 작성
+
+> API 의 완성이 목표가 아닌, 기본 및 주요 기능의 비즈니스 로직 및 유즈케이스는 구현이 완료 되어야 함. ( `Business Layer` )
+> 
+
+> DB Index , 대용량 처리를 위한 개선 포인트 등은 추후 챕터에서 진행하므로 목표는 `기능 개발의 완료` 로 합니다. 최적화 작업 등을 고려하는 것 보다 모든 기능을 정상적으로 제공할 수 있도록 해주세요. 특정 기능을 왜 이렇게 개발하였는지 합당한 이유와 함께 기능 개발을 진행해주시면 됩니다.
+>
 -----------
-### **`STEP 05`**
 <details>
 <summary>
 <h4>마일스톤</h4>
@@ -118,11 +144,10 @@ https://github.com/Saru-github/hhplus-concert-booking/blob/step6/docs/sequence_d
 <h4>플로우 차트</h4>
 </summary>
 <div markdown="1">
-https://github.com/Saru-github/hhplus-concert-booking/blob/step6/docs/flow_chart.md
+https://github.com/Saru-github/hhplus-concert-booking/blob/step8/docs/ERD.md
 </div>
 </details>
 
-### **`STEP 06`**
 
 <details>
 <summary>
@@ -142,3 +167,4 @@ https://github.com/Saru-github/hhplus-concert-booking/blob/step6/docs/API.md
 </div>
 </details>
 
+-----------

@@ -4,7 +4,7 @@
 
 1-1. 유저 대기열 토큰 발급 API
 
-  - URL : `/booking/user/{userId}/token`
+  - URL : `/booking/queue/{userId}/token`
   - Method : POST
   - Description : 유저 토큰 검증 및 발급
 
@@ -23,7 +23,7 @@
 
 1-2. 유저 대기열 확인 API
 
-- URL : `/booking/user/{userId}/queue`
+- URL : `/booking/queue/{userId}/queue`
 - Method :  
 - Description : 유저 대기열 확인(폴링)
 
@@ -270,22 +270,22 @@ booking
    │   ├── booking
    │   ├── concert
    │   ├── point
-   │   ├── user
+   │   ├── queue
    │   │      
    ├── application: 각 패키지 서비스
    │   ├── booking 
    │   ├── concert
    │   ├── point
-   │   ├── user
+   │   ├── queue
    ├── domain: 각 패키지 Repository, Entity
    │   ├── booking
    │   ├── concert
    │   ├── point
-   │   ├── user
+   │   ├── queue
    ├── infrastructure: 각 패키지 JpaRepositoryImpl
    │   ├── booking
    │   ├── concert
    │   ├── point
-   │   ├── user
+   │   ├── queue
    ├── exception
 ```

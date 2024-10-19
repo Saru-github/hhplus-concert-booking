@@ -1,7 +1,5 @@
 package hhplus.booking.app.user.interfaces.api;
 
-import hhplus.booking.app.queue.application.QueueService;
-import hhplus.booking.app.queue.application.dto.QueueInfo;
 import hhplus.booking.app.user.application.UserService;
 import hhplus.booking.app.user.application.dto.UserPointInfo;
 import lombok.RequiredArgsConstructor;

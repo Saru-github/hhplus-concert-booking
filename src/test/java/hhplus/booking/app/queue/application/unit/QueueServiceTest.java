@@ -43,7 +43,7 @@ class QueueServiceTest {
     void successTestGetQueueInfoWithNoTokenValue() {
 
         // given
-        given(queueRepository.registerQueue()).willReturn(tokenValue);
+        given(queueRepository.registerQueue()).willReturn(queue);
         given(queueRepository.getQueue(anyString())).willReturn(queue);
         given(queueRepository.findWaitingQueues("WAITING")).willReturn(List.of(queue));
 

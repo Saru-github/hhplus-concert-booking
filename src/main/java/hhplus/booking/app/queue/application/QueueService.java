@@ -23,7 +23,7 @@ public class QueueService {
         String tokenValue = input.authorizationHeader();
 
         if (tokenValue == null || tokenValue.isBlank()) {
-            tokenValue = queueRepository.registerQueue();
+            tokenValue = queueRepository.registerQueue().getTokenValue();
         } else {
             // "Bearer " 제거
             tokenValue = tokenValue.substring(7);

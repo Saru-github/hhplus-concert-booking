@@ -5,7 +5,7 @@ import hhplus.booking.app.queue.domain.entity.Queue;
 import java.util.List;
 
 public interface QueueRepository {
-    String registerQueue();
+    Queue registerQueue();
 
     Queue getQueue(String queueTokenValue);
 

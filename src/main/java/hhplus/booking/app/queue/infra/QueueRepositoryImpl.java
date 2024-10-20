@@ -16,15 +16,14 @@ public class QueueRepositoryImpl implements QueueRepository {
     private final QueueJpaRepository queueJpaRepository;
 
     @Override
-    public String registerQueue() {
+    public Queue registerQueue() {
         String queueTokenValue = UUID.randomUUID().toString();
-        queueJpaRepository.save(Queue.from(queueTokenValue));
-        return queueTokenValue;
+        return queueJpaRepository.save(Queue.from(queueTokenValue));
     }
 
     @Override
     public Queue getQueue(String tokenValue) {
-        return queueJpaRepository.findByTokenValue(tokenValue).orElse(Queue.from(registerQueue()));
+        return queueJpaRepository.findByTokenValue(tokenValue).orElse(registerQueue());
     }
 
 

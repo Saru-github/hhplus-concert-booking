@@ -87,7 +87,7 @@ class UserServiceTest {
         // when & then
         assertThatThrownBy(() -> new UserPointInfo.Input(1L, 0L))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("요청 포인트는 0 이하 일 수 없습니다.");;
+                .hasMessageContaining("요청 포인트는 0 이하 일 수 없습니다.");
     }
 
 

@@ -17,4 +17,6 @@ public interface QueueJpaRepository extends JpaRepository<Queue, Long> {
     List<Queue> findWaitingQueues(@Param("status") String status);
 
     void deleteByQueueId(Long tokenId);
+
+    Long countByStatusProcessing();
 }

@@ -33,6 +33,11 @@ public class QueueRepositoryImpl implements QueueRepository {
     }
 
     @Override
+    public long getProcessingQueueCount() {
+        return queueJpaRepository.countByStatusProcessing();
+    }
+
+    @Override
     public void deleteQueue(Long queueId) {
         queueJpaRepository.deleteByQueueId(queueId);
     }

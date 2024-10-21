@@ -11,6 +11,8 @@ public interface QueueRepository {
 
     List<Queue> findWaitingQueues(String status);
 
+    long getProcessingQueueCount();
+
     void deleteQueue(Long tokenId);
 
 }

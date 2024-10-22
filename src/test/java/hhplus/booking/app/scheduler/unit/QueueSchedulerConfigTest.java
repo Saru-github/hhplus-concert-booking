@@ -1,10 +1,11 @@
-package hhplus.booking.app.scheduler;
+package hhplus.booking.app.scheduler.unit;
 
 import hhplus.booking.app.concert.domain.entity.ConcertBooking;
 import hhplus.booking.app.concert.domain.entity.ConcertSeat;
 import hhplus.booking.app.concert.domain.repository.ConcertRepository;
 import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
+import hhplus.booking.app.scheduler.QueueScheduler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class QueueSchedulerTest {
+class QueueSchedulerConfigTest {
 
     @Mock
     private QueueRepository queueRepository;
@@ -66,5 +67,25 @@ class QueueSchedulerTest {
         // then
         assertThat(result.get(0).getStatus()).isEqualTo("EXPIRED");
         assertThat(concertSeat.getStatus()).isEqualTo("AVAILABLE");
+    }
+
+    @Test
+    @DisplayName("[성공] 대기열에 등록된 토큰의 만료시간이 지났을 때, 대기열 토큰이 삭제되는지 확인")
+    void successTestDeleteQueueScheduler() {
+
+        LocalDateTime expiredQueue1Time = LocalDateTime.now().plusMinutes(5);
+
+        Queue queue1 = new Queue(1L, "TEST_TOKEN", "WAITING", expiredQueue1Time, LocalDateTime.now(), LocalDateTime.now());
+        Queue queue2 = new Queue(2L, "TEST_TOKEN", "WAITING", LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now());
+
+        // given
+        given(queueRepository.findDeleteExpiredQueues()).willReturn(List.of(queue2));
+
+        // when
+        List<Queue> result = queueScheduler.deleteQueueScheduler();
+
+        // then
+        assertThat(result.get(0).getQueueId()).isEqualTo(2L);
+        assertThat(queue1.getExpiredAt()).isEqualTo(expiredQueue1Time);
     }
 }

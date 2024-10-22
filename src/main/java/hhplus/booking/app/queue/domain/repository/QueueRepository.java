@@ -15,4 +15,8 @@ public interface QueueRepository {
 
     void deleteQueue(Long tokenId);
 
+    List<Queue> findDeleteExpiredQueues();
+
+    void deleteExpiredQueues();
+
 }

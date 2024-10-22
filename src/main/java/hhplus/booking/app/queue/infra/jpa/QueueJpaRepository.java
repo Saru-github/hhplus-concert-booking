@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,5 +19,9 @@ public interface QueueJpaRepository extends JpaRepository<Queue, Long> {
 
     void deleteByQueueId(Long tokenId);
 
-    Long countByStatusProcessing();
+    Long countByStatus(String status);
+
+    List<Queue> findDeleteByExpiredAtBefore(LocalDateTime now);
+
+    void deleteByExpiredAtBefore(LocalDateTime now);
 }

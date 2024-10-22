@@ -6,6 +6,7 @@ import hhplus.booking.app.queue.infra.jpa.QueueJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,11 +35,21 @@ public class QueueRepositoryImpl implements QueueRepository {
 
     @Override
     public long getProcessingQueueCount() {
-        return queueJpaRepository.countByStatusProcessing();
+        return queueJpaRepository.countByStatus("PROCESSING");
     }
 
     @Override
     public void deleteQueue(Long queueId) {
         queueJpaRepository.deleteByQueueId(queueId);
+    }
+
+    @Override
+    public List<Queue> findDeleteExpiredQueues() {
+        return queueJpaRepository.findDeleteByExpiredAtBefore(LocalDateTime.now());
+    }
+
+    @Override
+    public void deleteExpiredQueues() {
+        queueJpaRepository.deleteByExpiredAtBefore(LocalDateTime.now());
     }
 }

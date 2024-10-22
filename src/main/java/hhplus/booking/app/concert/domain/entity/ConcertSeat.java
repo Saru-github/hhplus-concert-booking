@@ -58,6 +58,15 @@ public class ConcertSeat extends BaseTimeEntity {
     }
 
     public void updateSeatStatusToBooked() {
-        this.status = "BOOKED";
+        if ("AVAILABLE".equals(this.status)) {
+            this.status = "BOOKED";
+        }
+    }
+
+    public void updateSeatStatusToAvailable() {
+        if ("BOOKED".equals(this.status)) {
+            this.status = "AVAILABLE";
+        }
+
     }
 }

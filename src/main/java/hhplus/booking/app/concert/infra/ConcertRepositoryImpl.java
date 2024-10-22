@@ -10,6 +10,7 @@ import hhplus.booking.app.concert.infra.jpa.ConcertSeatJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -43,5 +44,10 @@ public class ConcertRepositoryImpl implements ConcertRepository {
     @Override
     public ConcertBooking getConcertBooking(Long concertBooingId) {
         return concertBookingJpaRepository.findById(concertBooingId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약번호입니다."));
+    }
+
+    @Override
+    public List<ConcertBooking> getExpiredBookings() {
+        return concertBookingJpaRepository.findByExpiredAtBefore(LocalDateTime.now());
     }
 }

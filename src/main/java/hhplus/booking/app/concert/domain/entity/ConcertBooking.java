@@ -69,6 +69,12 @@ public class ConcertBooking extends BaseTimeEntity {
         }
     }
 
+    public void expiredBookingStatus() {
+        if("BOOKED".equals(this.status)) {
+            this.status = "EXPIRED";
+        }
+    }
+
     public void updateBookingStatusToCompleted() {
         this.status = "COMPLETED";
         this.expiredAt = LocalDateTime.now();

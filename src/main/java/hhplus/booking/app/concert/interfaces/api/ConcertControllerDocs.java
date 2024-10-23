@@ -22,7 +22,6 @@ public interface ConcertControllerDocs {
             @ApiResponse(responseCode = "200", description = "콘서트의 일정이 정상 조회됩니다.")
     })
     public ResponseEntity<List<ConcertScheduleInfo.Output>> getConcertDates(
-            @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam("concertId") Long concertId
     );
 
@@ -31,7 +30,6 @@ public interface ConcertControllerDocs {
             @ApiResponse(responseCode = "200", description = "예약가능한 콘서트 좌석들이 정상 조회됩니다."),
     })
     public ResponseEntity<List<ConcertSeatInfo.Output>> getAvailableConcertSeats(
-            @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam("concertScheduleId") Long concertScheduleId
     );
 
@@ -40,7 +38,6 @@ public interface ConcertControllerDocs {
             @ApiResponse(responseCode = "200", description = "콘서트 예약이 정상 진행 되며 예약 정보가 조회됩니다."),
     })
     public ResponseEntity<ConcertBookingInfo.Output> bookConcertSeat(
-            @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody ConcertBookingInfo.Input input
     );
 }

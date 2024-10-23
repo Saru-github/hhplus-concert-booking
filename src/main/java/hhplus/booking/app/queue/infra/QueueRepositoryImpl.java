@@ -24,7 +24,7 @@ public class QueueRepositoryImpl implements QueueRepository {
 
     @Override
     public Queue getQueue(String tokenValue) {
-        return queueJpaRepository.findByTokenValue(tokenValue).orElse(registerQueue());
+        return queueJpaRepository.findByTokenValue(tokenValue).orElseThrow(() -> new IllegalStateException("잘못된 토큰 형식입니다."));
     }
 
 

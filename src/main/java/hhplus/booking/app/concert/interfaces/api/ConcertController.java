@@ -27,7 +27,6 @@ public class ConcertController implements ConcertControllerDocs{
 
     @GetMapping("/dates")
     public ResponseEntity<List<ConcertScheduleInfo.Output>> getConcertDates(
-            @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam("concertId") Long concertId
     ) {
 
@@ -36,7 +35,6 @@ public class ConcertController implements ConcertControllerDocs{
 
     @GetMapping("/seats")
     public ResponseEntity<List<ConcertSeatInfo.Output>> getAvailableConcertSeats(
-            @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam("concertScheduleId") Long concertScheduleId
     ) {
 
@@ -45,7 +43,6 @@ public class ConcertController implements ConcertControllerDocs{
 
     @PostMapping("/booking")
     public ResponseEntity<ConcertBookingInfo.Output> bookConcertSeat(
-            @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody ConcertBookingInfo.Input input
     ) {
         return ResponseEntity.ok(concertService.bookConcertSeat(input));

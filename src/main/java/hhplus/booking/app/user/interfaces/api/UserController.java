@@ -21,7 +21,7 @@ public class UserController implements UserControllerDocs{
 
     @GetMapping("/{userId}/points")
     public ResponseEntity<UserPointInfo.Output> getUserPoints(
-            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @RequestHeader(value = "Authorization", required = true) String authorizationHeader,
             @PathVariable("userId") Long userId
     ) {
         return ResponseEntity.ok(userService.getUserPoints(new UserPointInfo.Input(userId, null)));
@@ -29,7 +29,7 @@ public class UserController implements UserControllerDocs{
 
     @PutMapping("/{userId}/points/charge")
     public ResponseEntity<UserPointInfo.Output> chargeUserPoints(
-            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @RequestHeader(value = "Authorization", required = true) String authorizationHeader,
             @PathVariable("userId") Long userId,
             @RequestBody Long amount
     ) {
@@ -38,7 +38,7 @@ public class UserController implements UserControllerDocs{
 
     @PutMapping("/{userId}/points/use")
     public ResponseEntity<UserPointInfo.Output> useUserPoints(
-            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @RequestHeader(value = "Authorization", required = true) String authorizationHeader,
             @PathVariable("userId") Long userId,
             @RequestBody Long amount
     ) {

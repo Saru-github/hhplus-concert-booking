@@ -4,6 +4,7 @@ import hhplus.booking.app.concert.application.ConcertService;
 import hhplus.booking.app.concert.application.dto.ConcertBookingInfo;
 import hhplus.booking.app.concert.domain.entity.ConcertBooking;
 import hhplus.booking.app.concert.infra.jpa.ConcertBookingJpaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 @SpringBootTest
 class ConcurrentConcertBookingIntegrationTest {
 
@@ -75,6 +77,6 @@ class ConcurrentConcertBookingIntegrationTest {
         assertThat(exceptionCount).isEqualTo(9);
         assertThat(concertBooking.getUserId()).isEqualTo(userId);
 
-        System.out.printf("예약성공 유저ID: %d, 예약실패 유저수: %d명%n", userId, exceptionCount);
+        log.info("예약성공 유저ID: {}, 예약실패 유저수: {}명%n", userId, exceptionCount);
     }
 }

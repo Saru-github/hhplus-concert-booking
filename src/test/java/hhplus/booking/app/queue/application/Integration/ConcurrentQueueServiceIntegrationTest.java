@@ -4,6 +4,7 @@ import hhplus.booking.app.queue.application.QueueService;
 import hhplus.booking.app.queue.application.dto.QueueInfo;
 import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.infra.jpa.QueueJpaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 @SpringBootTest
 class ConcurrentQueueServiceIntegrationTest {
 
@@ -70,7 +72,7 @@ class ConcurrentQueueServiceIntegrationTest {
 
         // 결과 확인
         assertThat(results).hasSize(40); // 총 40개의 결과가 있어야 함
-        results.forEach(System.out::println);
+        log.info(results.toString());
         // 추가 검증: 순서가 올바르게 보장되었는지 확인
         for (int i = 0; i < results.size(); i++) {
             assertThat(results.get(i).rank()).isEqualTo(i + 1); // rank가 0부터 시작해야 함

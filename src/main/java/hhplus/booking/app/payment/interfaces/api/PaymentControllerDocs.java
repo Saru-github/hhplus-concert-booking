@@ -18,7 +18,7 @@ public interface PaymentControllerDocs {
             @ApiResponse(responseCode = "200", description = "결제 완료 및 결제 정보 반환"),
     })
     public ResponseEntity<PaymentInfo.Output> processPayment(
-            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestHeader(value = "Authorization", required = true) String authorizationHeader,
             @RequestParam("concertBookingId") Long concertBookingId
     );
 }

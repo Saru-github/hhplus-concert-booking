@@ -77,6 +77,6 @@ class ConcurrentConcertBookingIntegrationTest {
         assertThat(exceptionCount).isEqualTo(9);
         assertThat(concertBooking.getUserId()).isEqualTo(userId);
 
-        log.info("예약성공 유저ID: {}, 예약실패 유저수: {}명%n", userId, exceptionCount);
+        log.info("예약성공 유저ID: {}, 예약실패 유저수: {}명", userId, exceptionCount);
     }
 }

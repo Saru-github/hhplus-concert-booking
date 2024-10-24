@@ -31,7 +31,7 @@ public class Queue extends BaseTimeEntity {
     @PrePersist
     public void prePersist() {
         this.status = this.status == null ? "WAITING" : this.status;
-        this.expiredAt = this.expiredAt == null ? LocalDateTime.now().plusMinutes(5) : this.expiredAt;
+        this.expiredAt = this.expiredAt == null ? LocalDateTime.now().plusMinutes(1) : this.expiredAt;
     }
 
     public static Queue from(String tokenValue) {
@@ -56,15 +56,15 @@ public class Queue extends BaseTimeEntity {
     }
 
     public void refreshExpiration() {
-        this.expiredAt = LocalDateTime.now();
+        this.expiredAt = LocalDateTime.now().plusMinutes(1);
     }
 
     public void enterProcessing() {
         this.status = "WAITING".equals(this.status) ? "PROCESSING" : this.status;
+        this.expiredAt = LocalDateTime.now().plusMinutes(10);
     }
 
     public void expireQueue() {
         this.expiredAt = LocalDateTime.now();
-        this.status = "COMPLETED";
     }
 }

@@ -1,6 +1,8 @@
 package hhplus.booking.app.user.domain.entity;
 
 import hhplus.booking.config.database.BaseTimeEntity;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,8 +13,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -54,7 +54,7 @@ public class User extends BaseTimeEntity {
         long remainingBalance = this.balance - amount;
 
         if (0 > remainingBalance) {
-            throw new IllegalStateException("남은 잔액이 부족합니다.");
+            throw new BusinessException(ErrorCode.INSUFFICIENT_USER_POINTS);
         }
 
         this.balance = remainingBalance;

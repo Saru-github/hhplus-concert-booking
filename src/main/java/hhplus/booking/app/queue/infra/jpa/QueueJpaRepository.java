@@ -17,8 +17,6 @@ public interface QueueJpaRepository extends JpaRepository<Queue, Long> {
     @Query("SELECT q FROM Queue q WHERE q.status = :status ORDER BY q.createdAt ASC")
     List<Queue> findWaitingQueues(@Param("status") String status);
 
-    void deleteByQueueId(Long tokenId);
-
     Long countByStatus(String status);
 
     List<Queue> findDeleteByExpiredAtBefore(LocalDateTime now);

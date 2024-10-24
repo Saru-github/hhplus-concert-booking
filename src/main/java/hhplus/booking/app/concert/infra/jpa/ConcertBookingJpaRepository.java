@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ConcertBookingJpaRepository extends JpaRepository<ConcertBooking, Long> {
-    List<ConcertBooking> findByExpiredAtBefore(LocalDateTime currentTime);
+    List<ConcertBooking> findByStatusAndExpiredAtBefore(String status, LocalDateTime currentTime);
 }

@@ -9,11 +9,9 @@ public interface QueueRepository {
 
     Queue getQueue(String queueTokenValue);
 
-    List<Queue> findWaitingQueues(String status);
+    List<Queue> findWaitingQueues();
 
     long getProcessingQueueCount();
-
-    void deleteQueue(Long tokenId);
 
     List<Queue> findDeleteExpiredQueues();
 

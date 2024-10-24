@@ -77,7 +77,10 @@ public class DataInit implements ApplicationRunner {
             }
         }
 
+        // concertBookingID 1: 1번유저, 2번좌석 을 가진 예약 정보 생성
+        concertBookingJpaRepository.save(new ConcertBooking(null,1L, 11L, "BOOKED", LocalDateTime.now().plusMinutes(5)));
+
         // concertBookingID 2: 1번유저, 1번좌석 을 가진 예약 정보 생성
-        concertBookingJpaRepository.save(new ConcertBooking(2L, 1L, 1L, "COMPLETED", LocalDateTime.now()));
+        concertBookingJpaRepository.save(new ConcertBooking(null,1L, 1L, "COMPLETED", LocalDateTime.now()));
     }
 }

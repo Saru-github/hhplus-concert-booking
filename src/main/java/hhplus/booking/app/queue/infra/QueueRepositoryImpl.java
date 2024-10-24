@@ -3,6 +3,8 @@ package hhplus.booking.app.queue.infra;
 import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
 import hhplus.booking.app.queue.infra.jpa.QueueJpaRepository;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -24,23 +26,18 @@ public class QueueRepositoryImpl implements QueueRepository {
 
     @Override
     public Queue getQueue(String tokenValue) {
-        return queueJpaRepository.findByTokenValue(tokenValue).orElseThrow(() -> new IllegalStateException("잘못된 토큰 형식입니다."));
+        return queueJpaRepository.findByTokenValue(tokenValue).orElseThrow(() -> new BusinessException(ErrorCode.INVALID_TOKEN));
     }
 
 
     @Override
-    public List<Queue> findWaitingQueues(String status) {
-        return queueJpaRepository.findWaitingQueues(status);
+    public List<Queue> findWaitingQueues() {
+        return queueJpaRepository.findWaitingQueues("WAITING");
     }
 
     @Override
     public long getProcessingQueueCount() {
         return queueJpaRepository.countByStatus("PROCESSING");
-    }
-
-    @Override
-    public void deleteQueue(Long queueId) {
-        queueJpaRepository.deleteByQueueId(queueId);
     }
 
     @Override

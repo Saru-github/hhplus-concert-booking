@@ -1,6 +1,8 @@
 package hhplus.booking.app.user.application.dto;
 
 import hhplus.booking.app.user.domain.entity.User;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -11,7 +13,7 @@ public class UserPointInfo {
     ) {
         public Input {
             if (amount != null && 0 >= amount) {
-                throw new IllegalArgumentException("요청 포인트는 0 이하 일 수 없습니다.");
+                throw new BusinessException(ErrorCode.INVALID_POINT_REQUEST);
             }
         }
     }

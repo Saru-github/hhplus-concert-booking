@@ -7,6 +7,8 @@ import hhplus.booking.app.concert.domain.repository.ConcertRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertBookingJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertScheduleJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertSeatJpaRepository;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +25,7 @@ public class ConcertRepositoryImpl implements ConcertRepository {
 
     @Override
     public ConcertSeat getConcertSeat(Long concertSeatId) {
-        return concertSeatJpaRepository.findById(concertSeatId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 좌석입니다."));
+        return concertSeatJpaRepository.findById(concertSeatId).orElseThrow(() -> new BusinessException(ErrorCode.SEAT_NOT_FOUND));
     }
 
     @Override
@@ -43,11 +45,11 @@ public class ConcertRepositoryImpl implements ConcertRepository {
 
     @Override
     public ConcertBooking getConcertBooking(Long concertBooingId) {
-        return concertBookingJpaRepository.findById(concertBooingId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약번호입니다."));
+        return concertBookingJpaRepository.findById(concertBooingId).orElseThrow(() -> new BusinessException(ErrorCode.BOOKING_NOT_FOUND));
     }
 
     @Override
     public List<ConcertBooking> getExpiredBookings() {
-        return concertBookingJpaRepository.findByExpiredAtBefore(LocalDateTime.now());
+        return concertBookingJpaRepository.findByStatusAndExpiredAtBefore("BOOKED", LocalDateTime.now());
     }
 }

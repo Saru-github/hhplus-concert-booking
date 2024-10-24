@@ -7,6 +7,8 @@ import hhplus.booking.app.concert.domain.entity.ConcertBooking;
 import hhplus.booking.app.concert.domain.entity.ConcertSchedule;
 import hhplus.booking.app.concert.domain.entity.ConcertSeat;
 import hhplus.booking.app.concert.domain.repository.ConcertRepository;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,7 @@ public class ConcertService {
 
     @Transactional
     public ConcertBookingInfo.Output bookConcertSeat(ConcertBookingInfo.Input input) {
+
         try {
             ConcertSeat concertSeat = concertRepository.getConcertSeat(input.concertSeatId());
             concertSeat.validAvailableSeat();
@@ -43,7 +46,7 @@ public class ConcertService {
             concertSeat.updateSeatStatusToBooked();
             return new ConcertBookingInfo.Output(concertBooking);
         } catch (OptimisticLockingFailureException e) {
-            throw new IllegalStateException("해당 좌석이 이미 예약되었습니다. 다시 시도해 주세요.");
+            throw new BusinessException(ErrorCode.SEAT_ALREADY_BOOKED);
         }
     }
 }

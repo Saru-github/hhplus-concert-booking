@@ -4,6 +4,7 @@ import hhplus.booking.app.concert.application.ConcertService;
 import hhplus.booking.app.concert.application.dto.ConcertBookingInfo;
 import hhplus.booking.app.payment.application.PaymentUseCase;
 import hhplus.booking.app.payment.application.dto.PaymentInfo;
+import hhplus.booking.config.exception.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ class PaymentUseCaseIntegrationTest {
         // Given
         concertService.bookConcertSeat(new ConcertBookingInfo.Input(1L, 11L));
 
-        PaymentInfo.Input input = new PaymentInfo.Input(2L, "TEST_UUID_TOKEN");
+        PaymentInfo.Input input = new PaymentInfo.Input(1L, "Bearer TEST_UUID_TOKEN");
 
         // When
         PaymentInfo.Output result = paymentUseCase.processPayment(input);
@@ -43,8 +44,8 @@ class PaymentUseCaseIntegrationTest {
 
         // when & then
         assertThatThrownBy(() -> concertService.bookConcertSeat(new ConcertBookingInfo.Input(1L, 1L)))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("예약이 불가능한 좌석 입니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("예약 가능한 좌석이 아닙니다.");
 
     }
 
@@ -53,11 +54,11 @@ class PaymentUseCaseIntegrationTest {
     void failTestPaymentUseCaseWith() throws Exception {
 
         // given
-        PaymentInfo.Input input = new PaymentInfo.Input(1L, "TEST_UUID_TOKEN");
+        PaymentInfo.Input input = new PaymentInfo.Input(2L, "Bearer TEST_UUID_TOKEN");
 
         // when & then
         assertThatThrownBy(() -> paymentUseCase.processPayment(input))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("결제가 불가능한 예약입니다.");
 
     }

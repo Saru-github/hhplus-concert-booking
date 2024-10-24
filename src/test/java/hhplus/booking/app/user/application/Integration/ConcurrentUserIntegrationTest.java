@@ -63,5 +63,8 @@ class ConcurrentUserIntegrationTest {
         // 결과 확인
         assertThat(beforeUserPoint.balance()).isEqualTo(0L);
         assertThat(afterUserPoint.balance()).isEqualTo(100000L);
+
+        log.info("테스트 시작 전 포인트: {}", beforeUserPoint.balance());
+        log.info("테스트 시작 후 포인트: {}", afterUserPoint.balance());
     }
 }

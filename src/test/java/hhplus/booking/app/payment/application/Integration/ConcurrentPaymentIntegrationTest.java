@@ -25,7 +25,7 @@ class ConcurrentPaymentIntegrationTest {
     private PaymentUseCase paymentUseCase;
 
     @Test
-    @DisplayName("[성공] 새로생성한 4번 유저의 10번의 10000포인트 요청시, 100000만 포인트 올바르게 충전")
+    @DisplayName("[성공] 예약된 상태인 1번 예약에 관하여 정상적으로 1건만 최종 예약성공")
     void testPaymentUseCaseTest() throws Exception {
 
         // Given

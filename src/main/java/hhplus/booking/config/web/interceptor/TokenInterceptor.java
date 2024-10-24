@@ -1,6 +1,8 @@
-package hhplus.booking.config.web;
+package hhplus.booking.config.web.interceptor;
 
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +20,11 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        log.info("요청 URL: {}", request.getRequestURI());
-
         String tokenValue = request.getHeader("Authorization");
-
-        log.info("tokenValue: {}", tokenValue);
+        log.info("요청 URL: {}, 토큰 값: {}", request.getRequestURI(), tokenValue);
 
         if (tokenValue == null || tokenValue.isBlank()) {
-            throw new IllegalArgumentException("헤더 정보를 찾을 수 없습니다.");
+            throw new BusinessException(ErrorCode.TOKEN_NOT_FOUND);
         }
 
         tokenValue = tokenValue.substring(7);
@@ -33,7 +32,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         String tokenStatus = queueRepository.getQueue(tokenValue).getStatus();
 
         if (!"PROCESSING".equals(tokenStatus)) {
-            throw new IllegalStateException("토큰이 활성화 된 상태가 아닙니다.");
+            throw new BusinessException(ErrorCode.TOKEN_NOT_PROCESSING);
         }
 
         return HandlerInterceptor.super.preHandle(request, response, handler);

@@ -1,4 +1,4 @@
-package hhplus.booking.config.web;
+package hhplus.booking.config.web.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -34,26 +34,25 @@ public class GlobalFilter implements Filter {
         filterChain.doFilter(requestWrapper, responseWrapper);
 
         String url = requestWrapper.getRequestURI();
-        String authorizationHeader = requestWrapper.getHeader("Authorization");
         String requestContent = parseJsonOrDefault(new String(requestWrapper.getContentAsByteArray()));
 
-        log.info("request url: {}, request token: {}, \nrequest body: {}", url, authorizationHeader, requestContent);
+        log.info("request url: {}, \nrequest body: {}", url, requestContent);
 
         String responseContent = parseJsonOrDefault(new String(responseWrapper.getContentAsByteArray()));
         int httpStatus = responseWrapper.getStatus();
 
         responseWrapper.copyBodyToResponse();
-
         log.info("response Status : {},\n response body: {}\n", httpStatus, responseContent);
 
     }
 
-    private String parseJsonOrDefault(String content) {
+    public String parseJsonOrDefault(String content) {
+
         try {
             Object json = objectMapper.readValue(content, Object.class);
             return writer.writeValueAsString(json);
         } catch (Exception e) {
-            return content; // JSON 파싱 실패 시 원본 그대로 반환
+            return content;
         }
     }
 }

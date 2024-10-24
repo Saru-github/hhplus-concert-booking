@@ -3,9 +3,12 @@ package hhplus.booking.app.queue.infra;
 import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
 import hhplus.booking.app.queue.infra.jpa.QueueJpaRepository;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,25 +19,34 @@ public class QueueRepositoryImpl implements QueueRepository {
     private final QueueJpaRepository queueJpaRepository;
 
     @Override
-    public String registerQueue() {
+    public Queue registerQueue() {
         String queueTokenValue = UUID.randomUUID().toString();
-        queueJpaRepository.save(Queue.from(queueTokenValue));
-        return queueTokenValue;
+        return queueJpaRepository.save(Queue.from(queueTokenValue));
     }
 
     @Override
     public Queue getQueue(String tokenValue) {
-        return queueJpaRepository.findByTokenValue(tokenValue).orElse(Queue.from(registerQueue()));
+        return queueJpaRepository.findByTokenValue(tokenValue).orElseThrow(() -> new BusinessException(ErrorCode.INVALID_TOKEN));
     }
 
 
     @Override
-    public List<Queue> findWaitingQueues(String status) {
-        return queueJpaRepository.findWaitingQueues(status);
+    public List<Queue> findWaitingQueues() {
+        return queueJpaRepository.findWaitingQueues("WAITING");
     }
 
     @Override
-    public void deleteQueue(Long queueId) {
-        queueJpaRepository.deleteByQueueId(queueId);
+    public long getProcessingQueueCount() {
+        return queueJpaRepository.countByStatus("PROCESSING");
+    }
+
+    @Override
+    public List<Queue> findDeleteExpiredQueues() {
+        return queueJpaRepository.findDeleteByExpiredAtBefore(LocalDateTime.now());
+    }
+
+    @Override
+    public void deleteExpiredQueues() {
+        queueJpaRepository.deleteByExpiredAtBefore(LocalDateTime.now());
     }
 }

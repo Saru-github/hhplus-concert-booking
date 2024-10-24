@@ -43,9 +43,9 @@ class QueueServiceTest {
     void successTestGetQueueInfoWithNoTokenValue() {
 
         // given
-        given(queueRepository.registerQueue()).willReturn(tokenValue);
+        given(queueRepository.registerQueue()).willReturn(queue);
         given(queueRepository.getQueue(anyString())).willReturn(queue);
-        given(queueRepository.findWaitingQueues("WAITING")).willReturn(List.of(queue));
+        given(queueRepository.findWaitingQueues()).willReturn(List.of(queue));
 
         // when
         QueueInfo.Output result = queueService.getQueueInfo(new QueueInfo.Input(null));
@@ -64,7 +64,7 @@ class QueueServiceTest {
 
         // given
         given(queueRepository.getQueue(anyString())).willReturn(queue);
-        given(queueRepository.findWaitingQueues("WAITING")).willReturn(List.of(queue));
+        given(queueRepository.findWaitingQueues()).willReturn(List.of(queue));
 
         // when
         QueueInfo.Output result = queueService.getQueueInfo(new QueueInfo.Input(wrongToken));
@@ -86,7 +86,7 @@ class QueueServiceTest {
         Queue queue5 = new Queue(5L, tokenValue, "WAITING", LocalDateTime.now().plusMinutes(30), LocalDateTime.now(), LocalDateTime.now());
 
         given(queueRepository.getQueue(anyString())).willReturn(queue5);
-        given(queueRepository.findWaitingQueues("WAITING")).willReturn(List.of(queue, queue2, queue3, queue4, queue5));
+        given(queueRepository.findWaitingQueues()).willReturn(List.of(queue, queue2, queue3, queue4, queue5));
 
         // when
         QueueInfo.Output result = queueService.getQueueInfo(new QueueInfo.Input(tokenValue));

@@ -25,7 +25,6 @@ public class Payment extends BaseTimeEntity {
 
     private Long paymentAmount;
 
-
     public static Payment of(
             Long concertBookingId,
             Long paymentAmount

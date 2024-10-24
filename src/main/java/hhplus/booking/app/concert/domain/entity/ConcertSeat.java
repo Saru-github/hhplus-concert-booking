@@ -1,6 +1,8 @@
 package hhplus.booking.app.concert.domain.entity;
 
 import hhplus.booking.config.database.BaseTimeEntity;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -53,11 +55,20 @@ public class ConcertSeat extends BaseTimeEntity {
 
     public void validAvailableSeat() {
         if (!"AVAILABLE".equals(this.status)) {
-            throw new IllegalStateException("예약이 불가능한 좌석 입니다.");
+            throw new BusinessException(ErrorCode.SEAT_UNAVAILABLE);
         }
     }
 
     public void updateSeatStatusToBooked() {
-        this.status = "BOOKED";
+        if ("AVAILABLE".equals(this.status)) {
+            this.status = "BOOKED";
+        }
+    }
+
+    public void updateSeatStatusToAvailable() {
+        if ("BOOKED".equals(this.status)) {
+            this.status = "AVAILABLE";
+        }
+
     }
 }

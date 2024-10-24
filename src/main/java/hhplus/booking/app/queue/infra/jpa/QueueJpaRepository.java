@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +17,9 @@ public interface QueueJpaRepository extends JpaRepository<Queue, Long> {
     @Query("SELECT q FROM Queue q WHERE q.status = :status ORDER BY q.createdAt ASC")
     List<Queue> findWaitingQueues(@Param("status") String status);
 
-    void deleteByQueueId(Long tokenId);
+    Long countByStatus(String status);
+
+    List<Queue> findDeleteByExpiredAtBefore(LocalDateTime now);
+
+    void deleteByExpiredAtBefore(LocalDateTime now);
 }

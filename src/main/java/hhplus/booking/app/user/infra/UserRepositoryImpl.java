@@ -3,8 +3,9 @@ package hhplus.booking.app.user.infra;
 import hhplus.booking.app.user.domain.entity.User;
 import hhplus.booking.app.user.domain.repository.UserRepository;
 import hhplus.booking.app.user.infra.jpa.UserJpaRepository;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -15,6 +16,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUser(Long userId) {
-        return userJpaRepository.findById(userId).orElseThrow();
+        return userJpaRepository.findById(userId).orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 }

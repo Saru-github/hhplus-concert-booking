@@ -1,12 +1,15 @@
 package hhplus.booking.app.concert.domain.entity;
 
 import hhplus.booking.config.database.BaseTimeEntity;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,10 +35,13 @@ public class ConcertBooking extends BaseTimeEntity {
 
     private LocalDateTime expiredAt;
 
+    @Version
+    private Long version;
+
     @PrePersist
     public void prePersist() {
         this.status = this.status == null ? "BOOKED" : this.status;
-        this.expiredAt = this.expiredAt == null ? LocalDateTime.now() : this.expiredAt;
+        this.expiredAt = this.expiredAt == null ? LocalDateTime.now().plusMinutes(5) : this.expiredAt;
     }
 
     public static ConcertBooking of(
@@ -65,7 +71,13 @@ public class ConcertBooking extends BaseTimeEntity {
 
     public void validConcertBookingStatus() {
         if (!"BOOKED".equals(this.status)) {
-            throw new IllegalStateException("결제가 불가능한 예약입니다.");
+            throw new BusinessException(ErrorCode.PAYMENT_NOT_ALLOWED);
+        }
+    }
+
+    public void expiredBookingStatus() {
+        if("BOOKED".equals(this.status)) {
+            this.status = "EXPIRED";
         }
     }
 

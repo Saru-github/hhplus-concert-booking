@@ -4,13 +4,13 @@ import hhplus.booking.app.queue.application.dto.QueueInfo;
 import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class QueueService {
@@ -23,7 +23,7 @@ public class QueueService {
         String tokenValue = input.authorizationHeader();
 
         if (tokenValue == null || tokenValue.isBlank()) {
-            tokenValue = queueRepository.registerQueue();
+            tokenValue = queueRepository.registerQueue().getTokenValue();
         } else {
             // "Bearer " 제거
             tokenValue = tokenValue.substring(7);
@@ -33,10 +33,8 @@ public class QueueService {
         long rank = 0;
 
         if ("WAITING".equals(queue.getStatus())) {
-            List<Queue> waitingQueues = queueRepository.findWaitingQueues(queue.getStatus());
-
+            List<Queue> waitingQueues = queueRepository.findWaitingQueues();
             rank = waitingQueues.indexOf(queue) + 1;
-
             queue.refreshExpiration();
         }
 

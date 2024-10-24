@@ -10,7 +10,10 @@ import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
 import hhplus.booking.app.user.domain.entity.User;
 import hhplus.booking.app.user.domain.repository.UserRepository;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,8 @@ public class PaymentUseCase {
     @Transactional
     public PaymentInfo.Output processPayment(PaymentInfo.Input input) {
 
+        try {
+
         ConcertBooking concertBooking = concertRepository.getConcertBooking(input.concertBookingId());
         concertBooking.validConcertBookingStatus();
 
@@ -34,10 +39,16 @@ public class PaymentUseCase {
         Queue queue = queueRepository.getQueue(input.authorizationHeader().substring(7));
 
         user.usePoints(concertSeat.getPrice());
+
         Payment payment = paymentRepository.savePayment(concertBooking.getConcertBookingId(), concertSeat.getPrice());
         concertBooking.updateBookingStatusToCompleted();
-        queueRepository.deleteQueue(queue.getQueueId());
+        queue.expireQueue();
 
         return new PaymentInfo.Output(payment.getPaymentId());
+
+        } catch (OptimisticLockingFailureException e) {
+            throw new BusinessException(ErrorCode.PAYMENT_NOT_ALLOWED);
+        }
+
     }
 }

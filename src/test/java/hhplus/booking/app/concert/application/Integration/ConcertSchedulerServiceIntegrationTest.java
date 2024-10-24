@@ -31,7 +31,7 @@ class ConcertSchedulerServiceIntegrationTest {
     void testConcurrentQueueInfo() throws Exception {
 
         // given
-        ConcertBooking concertBooking = new ConcertBooking(2L, 1L, 1L,"BOOKED", LocalDateTime.now());
+        ConcertBooking concertBooking = new ConcertBooking(null, 1L, 1L,"BOOKED", LocalDateTime.now());
         concertBookingJpaRepository.save(concertBooking);
 
         ConcertSeatInfo.Output result1seatBeforeExecuteScheduler = concertService.getAvailableConcertSeatInfos(new ConcertSeatInfo.Input(1L)).get(0);

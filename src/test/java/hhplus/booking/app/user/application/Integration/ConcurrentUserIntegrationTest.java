@@ -5,6 +5,7 @@ import hhplus.booking.app.user.application.UserService;
 import hhplus.booking.app.user.application.dto.UserPointInfo;
 import hhplus.booking.app.user.domain.entity.User;
 import hhplus.booking.app.user.infra.jpa.UserJpaRepository;
+import hhplus.booking.config.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,98 +31,47 @@ class ConcurrentUserIntegrationTest {
     @Autowired
     private UserJpaRepository userJpaRepository;
 
-
     @Test
-    @DisplayName("[낙관적락_성공] 새로생성한 4번 유저의 1000번의 10000포인트 요청시, 10000000만 포인트 올바르게 충전")
-    void pessimisticLockTestUserPointUserTest() throws Exception {
-
-
-        // Given
-        userJpaRepository.save(User.of("대영"));
-        UserPointInfo.Output beforeUserPoint = userService.getUserPoints(new UserPointInfo.Input(4L, null));
-
-
-        List<CompletableFuture<UserPointInfo.Output>> futures = new ArrayList<>();
-
-        // When
-        for (int i = 0; i < 1000; i++) {
-            CompletableFuture<UserPointInfo.Output> future = CompletableFuture.supplyAsync(() -> {
-                try {
-                    return userService.chargeUserPoints(new UserPointInfo.Input(4L, 10000L));
-                } catch (Exception e) {
-                    e.getStackTrace();
-                    return null;
-                }
-            });
-            futures.add(future);
-        }
-
-        CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-        allOf.get();
-
-        // Then
-        List<UserPointInfo.Output> results = new ArrayList<>();
-        for (CompletableFuture<UserPointInfo.Output> future : futures) {
-            UserPointInfo.Output output = future.join();
-            if (output != null) {
-                results.add(output);
-            }
-        }
-
-        UserPointInfo.Output afterUserPoint = userService.getUserPoints(new UserPointInfo.Input(4L, null));
-
-        // 결과 확인
-        assertThat(beforeUserPoint.balance()).isEqualTo(0L);
-        assertThat(afterUserPoint.balance()).isEqualTo(10000000L);
-
-        log.info("테스트 시작 전 포인트: {}", beforeUserPoint.balance());
-        log.info("테스트 시작 후 포인트: {}", afterUserPoint.balance());
-    }
-
-    @Test
-    @DisplayName("[비관적락_성공] 새로생성한 4번 유저의 1000번의 10000포인트 요청시, 10000000만 포인트 올바르게 충전")
+    @DisplayName("[낙관적락_성공] 새로생성한 4번 유저의 5번의 10000포인트 요청시, 단 한번만 성공하고 나머지는 실패")
     void optimisticLockTestUserPointUserTest() throws Exception {
-
-
         // Given
         userJpaRepository.save(User.of("대영"));
         UserPointInfo.Output beforeUserPoint = userService.getUserPoints(new UserPointInfo.Input(4L, null));
 
+        AtomicInteger successCount = new AtomicInteger(0);
+        AtomicInteger failCount = new AtomicInteger(0);
 
-        List<CompletableFuture<UserPointInfo.Output>> futures = new ArrayList<>();
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
 
         // When
-        for (int i = 0; i < 1000; i++) {
-            CompletableFuture<UserPointInfo.Output> future = CompletableFuture.supplyAsync(() -> {
+        for (int i = 0; i < 5; i++) {
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                 try {
-                    return userService.chargeUserPoints(new UserPointInfo.Input(4L, 10000L));
+                    userService.chargeUserPoints(new UserPointInfo.Input(4L, 10000L));
+                    successCount.incrementAndGet();
+                } catch (BusinessException e) {
+                    failCount.incrementAndGet();
                 } catch (Exception e) {
-                    e.getStackTrace();
-                    return null;
+                    failCount.incrementAndGet();
                 }
             });
             futures.add(future);
         }
 
-        CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-        allOf.get();
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
         // Then
-        List<UserPointInfo.Output> results = new ArrayList<>();
-        for (CompletableFuture<UserPointInfo.Output> future : futures) {
-            UserPointInfo.Output output = future.join();
-            if (output != null) {
-                results.add(output);
-            }
-        }
-
         UserPointInfo.Output afterUserPoint = userService.getUserPoints(new UserPointInfo.Input(4L, null));
 
-        // 결과 확인
         assertThat(beforeUserPoint.balance()).isEqualTo(0L);
-        assertThat(afterUserPoint.balance()).isEqualTo(10000000L);
+        assertThat(afterUserPoint.balance()).isEqualTo(10000L);
+        assertThat(successCount.get()).isEqualTo(1);
+        assertThat(failCount.get()).isEqualTo(4);
 
         log.info("테스트 시작 전 포인트: {}", beforeUserPoint.balance());
         log.info("테스트 시작 후 포인트: {}", afterUserPoint.balance());
+        log.info("성공 횟수: {}", successCount.get());
+        log.info("실패 횟수: {}", failCount.get());
     }
+
 }

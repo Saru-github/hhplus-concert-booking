@@ -13,7 +13,6 @@ import java.util.Optional;
 @Repository
 public interface ConcertBookingJpaRepository extends JpaRepository<ConcertBooking, Long> {
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<ConcertBooking> findById(Long id);
     List<ConcertBooking> findByStatusAndExpiredAtBefore(String status, LocalDateTime currentTime);
 }

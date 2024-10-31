@@ -3,10 +3,10 @@ package hhplus.booking.app.user.application;
 import hhplus.booking.app.user.application.dto.UserPointInfo;
 import hhplus.booking.app.user.domain.entity.User;
 import hhplus.booking.app.user.domain.repository.UserRepository;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +22,6 @@ public class UserService {
     }
 
     @Transactional
-    @Retryable(
-        retryFor = {ObjectOptimisticLockingFailureException.class},
-        maxAttempts = 10,
-        backoff = @Backoff(100)
-    )
     public UserPointInfo.Output chargeUserPoints(UserPointInfo.Input input) {
 
         User user = userRepository.getUser(input.userId());

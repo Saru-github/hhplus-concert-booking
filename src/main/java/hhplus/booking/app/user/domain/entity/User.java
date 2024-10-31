@@ -29,9 +29,6 @@ public class User extends BaseTimeEntity {
 
     private Long balance;
 
-    @Version
-    private Long version;
-
     @PrePersist
     public void prePersist() {
         this.balance = this.balance == null ? 0L : this.balance;

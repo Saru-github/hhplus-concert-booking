@@ -31,7 +31,7 @@ class ConcurrentUserIntegrationTest {
 
 
     @Test
-    @DisplayName("[낙관적_성공] 새로생성한 4번 유저의 1000번의 10000포인트 요청시, 10000000만 포인트 올바르게 충전")
+    @DisplayName("[낙관적락_성공] 새로생성한 4번 유저의 1000번의 10000포인트 요청시, 10000000만 포인트 올바르게 충전")
     void pessimisticLockTestUserPointUserTest() throws Exception {
 
 

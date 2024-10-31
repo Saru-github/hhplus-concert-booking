@@ -28,7 +28,7 @@ class ConcurrentPaymentIntegrationTest {
     private PaymentUseCase paymentUseCase;
 
     @Test
-    @DisplayName("[비관적락_성공] 예약된 상태인 1번 예약에 관하여 정상적으로 1건만 최종 결제성공")
+    @DisplayName("[낙관적락_성공] 예약된 상태인 1번 예약에 관하여 정상적으로 1건만 최종 결제성공")
     void pessimisticLockTestPaymentUseCaseTest() throws Exception {
 
         // Given

@@ -31,7 +31,7 @@ class ConcurrentConcertBookingIntegrationTest {
     private ConcertBookingJpaRepository concertBookingJpaRepository;
 
     @Test
-    @DisplayName("[비관적락_성공] 1000명이 동시에 좌석 신청 1번만 예약 보장 테스트")
+    @DisplayName("[낙관적락_성공] 1000명이 동시에 좌석 신청 1번만 예약 보장 테스트")
     void pessimisticLockTestPaymentUseCaseTest() throws Exception {
 
         // Given
@@ -84,7 +84,7 @@ class ConcurrentConcertBookingIntegrationTest {
     }
 
     @Test
-    @DisplayName("[낙관적락_성공] 1000명이 동시에 좌석 신청 1번만 예약 보장 테스트")
+    @DisplayName("[비관적락_성공] 1000명이 동시에 좌석 신청 1번만 예약 보장 테스트")
     void optimisticLockTestPaymentUseCaseTest() throws Exception {
 
         // Given

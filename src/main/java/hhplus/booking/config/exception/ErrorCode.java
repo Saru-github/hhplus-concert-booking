@@ -22,6 +22,7 @@ public enum ErrorCode {
     BOOKING_NOT_FOUND(200, "예약 정보 찾을 수 없습니다."),
     PAYMENT_NOT_ALLOWED(200, "결제가 불가능한 예약입니다."),
     PAYMENT_FAILED_AMOUNT(200, "결제 잔액이 부족합니다."),
+    POINT_DUPLICATE_REQUEST(200, "포인트 중복 요청입니다."),
 
     INTERNAL_SERVER_ERROR(500, "서버 에러가 발생하였습니다.");
 

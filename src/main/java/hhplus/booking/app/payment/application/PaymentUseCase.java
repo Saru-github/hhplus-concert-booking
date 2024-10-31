@@ -29,8 +29,6 @@ public class PaymentUseCase {
     @Transactional
     public PaymentInfo.Output processPayment(PaymentInfo.Input input) {
 
-        try {
-
         ConcertBooking concertBooking = concertRepository.getConcertBooking(input.concertBookingId());
         concertBooking.validConcertBookingStatus();
 
@@ -45,10 +43,5 @@ public class PaymentUseCase {
         queue.expireQueue();
 
         return new PaymentInfo.Output(payment.getPaymentId());
-
-        } catch (OptimisticLockingFailureException e) {
-            throw new BusinessException(ErrorCode.PAYMENT_NOT_ALLOWED);
-        }
-
     }
 }

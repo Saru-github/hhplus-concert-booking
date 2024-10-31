@@ -23,10 +23,14 @@ public class UserService {
 
     @Transactional
     public UserPointInfo.Output chargeUserPoints(UserPointInfo.Input input) {
+        try {
+            User user = userRepository.getUser(input.userId());
+            user.chargePoints(input.amount());
+            return new UserPointInfo.Output(user);
 
-        User user = userRepository.getUser(input.userId());
-        user.chargePoints(input.amount());
-        return new UserPointInfo.Output(user);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            throw new BusinessException(ErrorCode.POINT_DUPLICATE_REQUEST);
+        }
     }
 
     @Transactional

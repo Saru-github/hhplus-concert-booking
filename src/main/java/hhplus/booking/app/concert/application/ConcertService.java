@@ -39,14 +39,11 @@ public class ConcertService {
     @Transactional
     public ConcertBookingInfo.Output bookConcertSeat(ConcertBookingInfo.Input input) {
 
-        try {
-            ConcertSeat concertSeat = concertRepository.getConcertSeat(input.concertSeatId());
-            concertSeat.validAvailableSeat();
-            ConcertBooking concertBooking = concertRepository.bookConcertSeat(input.userId(), input.concertSeatId());
-            concertSeat.updateSeatStatusToBooked();
-            return new ConcertBookingInfo.Output(concertBooking);
-        } catch (OptimisticLockingFailureException e) {
-            throw new BusinessException(ErrorCode.SEAT_ALREADY_BOOKED);
-        }
+        ConcertSeat concertSeat = concertRepository.getConcertSeat(input.concertSeatId());
+        concertSeat.validAvailableSeat();
+        ConcertBooking concertBooking = concertRepository.bookConcertSeat(input.userId(), input.concertSeatId());
+        concertSeat.updateSeatStatusToBooked();
+        return new ConcertBookingInfo.Output(concertBooking);
+
     }
 }

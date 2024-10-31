@@ -32,9 +32,6 @@ public class ConcertSeat extends BaseTimeEntity {
 
     private String status;
 
-    @Version
-    private Long version; // 낙관적 잠금을 위한 필드
-
     public static ConcertSeat of(Long concertScheduleId, Long seatNumber, Long price, String status) {
         return ConcertSeat.builder()
                 .concertScheduleId(concertScheduleId)
@@ -54,6 +51,11 @@ public class ConcertSeat extends BaseTimeEntity {
     }
 
     public void validAvailableSeat() {
+
+        if ("BOOKED".equals(this.status)) {
+            throw new BusinessException(ErrorCode.SEAT_ALREADY_BOOKED);
+        }
+
         if (!"AVAILABLE".equals(this.status)) {
             throw new BusinessException(ErrorCode.SEAT_UNAVAILABLE);
         }

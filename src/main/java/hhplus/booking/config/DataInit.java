@@ -49,9 +49,9 @@ public class DataInit implements ApplicationRunner {
         queueJpaRepository.save(Queue.from("TEST_UUID_TOKEN"));
 
         // userId 1~3: 10만 포인트를 가진 유저 생성
-        userJpaRepository.save(new User(1L, "유저1", 100000L));
-        userJpaRepository.save(new User(2L, "유저2", 100000L));
-        userJpaRepository.save(new User(3L, "유저3", 100000L));
+        userJpaRepository.save(new User(null, "유저1", 10000000L));
+        userJpaRepository.save(new User(null, "유저2", 100000L));
+        userJpaRepository.save(new User(null, "유저3", 100000L));
 
         // concertID 1~3: 콘서트 3개 생성
         concertJpaRepository.save(new Concert(1L, "IU 콘서트"));

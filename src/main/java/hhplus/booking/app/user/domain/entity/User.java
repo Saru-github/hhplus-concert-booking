@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +28,9 @@ public class User extends BaseTimeEntity {
     private String userName;
 
     private Long balance;
+
+    @Version
+    private Long version;
 
     @PrePersist
     public void prePersist() {

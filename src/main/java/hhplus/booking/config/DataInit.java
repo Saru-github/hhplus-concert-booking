@@ -46,7 +46,7 @@ public class DataInit implements ApplicationRunner {
         }
 
         // queueID 51: TEST_UUID_TOKEN를 tokenValue로 가진 WAITING 대기열 1개 생성
-        queueJpaRepository.save(Queue.from("TEST_UUID_TOKEN"));
+        queueJpaRepository.save(new Queue("TEST_UUID_TOKEN", "WAITING", null));
 
         // userId 1~3: 10만 포인트를 가진 유저 생성
         userJpaRepository.save(new User(null, "유저1", 10000000L));

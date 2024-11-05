@@ -3,8 +3,11 @@ package hhplus.booking.app.queue.application;
 import hhplus.booking.app.queue.application.dto.QueueInfo;
 import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
+import hhplus.booking.app.queue.infra.jpa.QueueJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +19,10 @@ import java.util.List;
 public class QueueService {
 
     private final QueueRepository queueRepository;
+    private final QueueJpaRepository queueJpaRepository;
 
     @Transactional
+    @Cacheable(value = "queueInfoCache", key = "#tokenValue", unless = "#tokenValue == null || #tokenValue.isEmpty() || #result.status != 'WAITING'")
     public QueueInfo.Output getQueueInfo(QueueInfo.Input input) {
 
         String tokenValue = input.authorizationHeader();
@@ -44,5 +49,11 @@ public class QueueService {
                 .rank(rank)
                 .status(queue.getStatus())
                 .build();
+    }
+
+    @CacheEvict(value = "queueInfoCache", key = "#queue.tokenValue")
+    public void updateQueueStatus(Queue queue, String status) {
+        queue.enterProcessing();
+        queueJpaRepository.save(queue);
     }
 }

@@ -102,14 +102,15 @@ public class DataInit implements ApplicationRunner {
 
         // queueId 10~50: WAITING 대기열 40개 생성
         for (int i = 10;  i < 50; i++) {
-            String queueTokenValue = UUID.randomUUID().toString();
 
             LocalDateTime nowKST = LocalDateTime.now(ZoneOffset.ofHours(9));  // 한국 시간(KST) 기준
             long timestamp = nowKST.toEpochSecond(ZoneOffset.ofHours(9));  // 시간(초 단위)
 
             // Redis에 대기 중인 큐를 추가. 점수는 현재 시간으로 설정.
+            String queueTokenValue = UUID.randomUUID().toString();
             redisTemplate.opsForZSet().add("queue:waiting", queueTokenValue, timestamp);
-            redisTemplate.opsForHash().put("queue:status", queueTokenValue, "WAITING");
+            queueTokenValue = UUID.randomUUID().toString();
+            redisTemplate.opsForZSet().add("queue:processing", queueTokenValue, timestamp);
         }
 
         // queueID 51: TEST_UUID_TOKEN를 tokenValue로 가진 WAITING 대기열 1개 생성
@@ -117,8 +118,8 @@ public class DataInit implements ApplicationRunner {
         long timestamp = nowKST.toEpochSecond(ZoneOffset.ofHours(9));  // 시간(초 단위)
 
         // Redis에 대기 중인 큐를 추가. 점수는 현재 시간으로 설정.
-        redisTemplate.opsForZSet().add("queue:waiting", "TEST_UUID_TOKEN", timestamp);
-        redisTemplate.opsForHash().put("queue:status", "TEST_UUID_TOKEN", "WAITING");
+        redisTemplate.opsForZSet().add("queue:waiting", "TEST_WAITING_TOKEN", timestamp);
+        redisTemplate.opsForZSet().add("queue:processing", "TEST_PROCESSING_TOKEN", timestamp);
 //
 //        // userId 1~3: 10만 포인트를 가진 유저 생성
 //        userJpaRepository.save(new User(null, "유저1", 10000000L));

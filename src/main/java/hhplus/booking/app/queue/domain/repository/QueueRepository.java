@@ -5,14 +5,11 @@ import hhplus.booking.app.queue.domain.entity.Queue;
 import java.util.List;
 
 public interface QueueRepository {
-    Queue registerQueue();
+    String registerQueue();
 
-    Queue getQueue(String queueTokenValue);
-
+    Long getQueueRank(String queueTokenValue);
 
     long getProcessingQueueCount();
-
-    long findWaitingQueues(String queueTokenValue);
 
     List<Queue> findDeleteExpiredQueues();
 

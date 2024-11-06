@@ -4,12 +4,14 @@ import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
 import hhplus.booking.config.exception.BusinessException;
 import hhplus.booking.config.exception.ErrorCode;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Repository;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -22,14 +24,21 @@ import java.util.stream.Collectors;
 @Primary
 public class RedisQueueRepository implements QueueRepository {
 
-    private static final String QUEUE_KEY = "queue";  // Redis에 저장할 키 이름
+    private static final String WAITING_QUEUE = "queue:waiting";
+    private static final String PROCESSING_QUEUE = "queue:processing";
+    private static final Long EXPIRED_SECONDS = 60L;
     private final RedisTemplate<String, String> redisTemplate;
 
-    // RedisTemplate에서 ZSetOperations 가져오기
-    private final ZSetOperations<String, String> zSetOperations;
+    @PostConstruct
+    public void init() {
+        if (redisTemplate != null) {
+            // 서비스가 시작될 때, 큐에 TTL을 한 번만 설정
+            redisTemplate.expire(WAITING_QUEUE, Duration.ofSeconds(EXPIRED_SECONDS));
+        }
+    }
 
     @Override
-    public Queue registerQueue() {
+    public String registerQueue() {
         // UUID로 QueueToken을 생성
         String queueTokenValue = UUID.randomUUID().toString();
 
@@ -37,37 +46,33 @@ public class RedisQueueRepository implements QueueRepository {
         long timestamp = nowKST.toEpochSecond(ZoneOffset.ofHours(9));  // 시간(초 단위)
 
         // Redis에 대기 중인 큐를 추가. 점수는 현재 시간으로 설정.
-        redisTemplate.opsForZSet().add("queue:waiting", queueTokenValue, timestamp);
-        redisTemplate.opsForHash().put("queue:status", queueTokenValue, "WAITING");
+        redisTemplate.opsForZSet().add(WAITING_QUEUE, queueTokenValue, timestamp);
+        redisTemplate.expire(WAITING_QUEUE, Duration.ofSeconds(EXPIRED_SECONDS));
 
         // Queue 객체 반환
-        return Queue.from(queueTokenValue);  // 정상적으로 생성된 Queue를 반환
+        return queueTokenValue;
     }
 
     @Override
-    public Queue getQueue(String queueTokenValue) {
+    public Long getQueueRank(String queueTokenValue) {
         // queueTokenValue가 공백일 경우 새 큐를 생성해서 반환
         if (queueTokenValue == null || queueTokenValue.trim().isEmpty()) {
-            return registerQueue();  // 빈 토큰이 들어오면 새 토큰을 생성해서 반환
+            queueTokenValue = registerQueue();
         }
 
-        // Redis에서 큐를 가져옵니다. 존재하지 않으면 예외를 던짐.
-        boolean exists = redisTemplate.opsForZSet().rank("queue:waiting", queueTokenValue) != null;
-        if (!exists) {
-            throw new BusinessException(ErrorCode.INVALID_TOKEN);  // 유효하지 않은 토큰이면 예외 처리
+        Long queueRank = redisTemplate.opsForZSet().rank(PROCESSING_QUEUE, queueTokenValue);
+
+        if (queueRank != null && queueRank >= 0L) {
+            return 0L;
         }
 
-        return Queue.from(queueTokenValue);  // 존재하는 큐는 그대로 반환
-    }
+        queueRank = redisTemplate.opsForZSet().rank("queue:waiting", queueTokenValue);
 
-    @Override
-    public long findWaitingQueues(String queueTokenValue) {
-        Long rank = redisTemplate.opsForZSet().rank("queue:waiting", queueTokenValue);
-        if (rank != null) {
-            return rank + 1;  // rank는 0부터 시작하므로 +1하여 반환
-        } else {
-            throw new BusinessException(ErrorCode.INVALID_TOKEN);  // rank가 null인 경우 예외
+        if (queueRank == null) {
+            throw new BusinessException(ErrorCode.INVALID_TOKEN);
         }
+
+        return queueRank + 1;
     }
 
     @Override
@@ -93,12 +98,12 @@ public class RedisQueueRepository implements QueueRepository {
 
     @Override
     public void deleteExpiredQueues() {
-        // 만료된 큐들을 삭제합니다.
-        LocalDateTime now = LocalDateTime.now();
-        Set<String> expiredQueues = redisTemplate.opsForZSet().rangeByScore(QUEUE_KEY, 0, now.toEpochSecond(java.time.ZoneOffset.UTC));
-
-        for (String queueTokenValue : expiredQueues) {
-            redisTemplate.opsForZSet().remove(QUEUE_KEY, queueTokenValue);
-        }
+//        // 만료된 큐들을 삭제합니다.
+//        LocalDateTime now = LocalDateTime.now();
+//        Set<String> expiredQueues = redisTemplate.opsForZSet().rangeByScore(QUEUE_KEY, 0, now.toEpochSecond(java.time.ZoneOffset.UTC));
+//
+//        for (String queueTokenValue : expiredQueues) {
+//            redisTemplate.opsForZSet().remove(QUEUE_KEY, queueTokenValue);
+//        }
     }
 }

@@ -8,15 +8,11 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.util.StringUtils;
@@ -26,7 +22,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.BindException;
-import java.time.Duration;
 
 @Slf4j
 @Configuration
@@ -85,7 +80,8 @@ public class EmbeddedRedisConfig {
     private Process executePortCheckCommand(int port) throws IOException {
         // Windows 명령어
         String command = String.format("netstat -ano | findstr LISTENING | findstr %d", port);
-        return Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", command});
+        // return Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", command});
+        return Runtime.getRuntime().exec(new String[]{"bash", "-c", command});
     }
 
     /**
@@ -127,20 +123,6 @@ public class EmbeddedRedisConfig {
         return redisTemplate;
     }
 
-    @Bean
-    public ZSetOperations<String, String> zSetOperations(RedisTemplate<String, String> redisTemplate) {
-        return redisTemplate.opsForZSet();
-    }
 
-    @Bean
-    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofHours(3)) // 캐시 유효 기간 설정 (예: 3시간)
-                .disableCachingNullValues();   // null 값 캐싱 방지
-
-        return RedisCacheManager.builder(redisConnectionFactory)
-                .cacheDefaults(redisCacheConfiguration)
-                .build();
-    }
 }
 

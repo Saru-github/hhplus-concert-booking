@@ -10,10 +10,7 @@ import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
 import hhplus.booking.app.user.domain.entity.User;
 import hhplus.booking.app.user.domain.repository.UserRepository;
-import hhplus.booking.config.exception.BusinessException;
-import hhplus.booking.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

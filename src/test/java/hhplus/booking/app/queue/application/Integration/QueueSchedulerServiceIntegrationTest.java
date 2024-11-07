@@ -38,11 +38,11 @@ class QueueSchedulerServiceIntegrationTest {
 
         // when
 
-        QueueInfo.Output result53AfterExecuteScheduler = queueService.getQueueInfo(new QueueInfo.Input("Bearer TEST_TOKEN2"));
-
         // then
-        assertThat(result53BeforeExecuteScheduler.rank()).isEqualTo(43L);
-        assertThat(result53AfterExecuteScheduler.rank()).isEqualTo(42L);
+        assertThat(result1afterBatch.rank()).isEqualTo(0L);
+        assertThat(result1afterBatch.status()).isEqualTo("PROCESSING");
+        assertThat(result2afterBatch.rank()).isEqualTo(0L);
+        assertThat(result2afterBatch.status()).isEqualTo("PROCESSING");
 
     }
 }

@@ -4,6 +4,7 @@ services:
   influxdb:
     image: bitnami/influxdb:1.8.5
     container_name: influxdb
+    platform: linux/x86_64
     ports:
       - "8086:8086"
       - "8085:8088"
@@ -12,9 +13,26 @@ services:
       - INFLUXDB_ADMIN_USER_TOKEN=admintoken123
       - INFLUXDB_HTTP_AUTH_ENABLED=false
       - INFLUXDB_DB=myk6db
-  granafa:
+  grafana:
+    platform: linux/x86_64
     image: bitnami/grafana:latest
     ports:
       - "3000:3000"
   k6:
+    platform: linux/x86_64
     image: loadimpact/k6  # 공식 k6 이미지
+    depends_on:
+      - influxdb
+    volumes:
+      - ./src/main/resources/script.js:/script.js
+    entrypoint: [ "k6", "run", "--out", "influxdb=http://influxdb:8086/myk6db", "/script.js" ]
+  mysql:
+    image: mysql:latest
+    container_name: mysql_con
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE= sample_db           # 기본 데이터베이스 생성
+      - MYSQL_USER= root                     # 사용자 계정 생성
+      - MYSQL_PASSWORD= 12345678        # 사용자 비밀번호 설정
+    restart: always  # 컨테이너 자동 재시작 설정

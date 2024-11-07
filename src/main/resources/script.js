@@ -7,9 +7,9 @@ export const options = {
 };
 
 export default function () {
-  const res = http.get('http://host.docker.internal:8080/booking/queue/status', {
+  const res = http.get('http://host.docker.internal:8081/booking/queue/status', {
     headers: {
-      Authorization: 'Bearer YOUR_TOKEN', // 필요시 Authorization 헤더 추가
+      Authorization: 'Bearer TEST_UUID_TOKEN', // 필요시 Authorization 헤더 추가
     },
   });
   console.log(`Response status: ${res.status}`);

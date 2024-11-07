@@ -35,6 +35,9 @@ public class ConcertBooking extends BaseTimeEntity {
 
     private LocalDateTime expiredAt;
 
+    @Version
+    private long version;
+
     @PrePersist
     public void prePersist() {
         this.status = this.status == null ? "BOOKED" : this.status;

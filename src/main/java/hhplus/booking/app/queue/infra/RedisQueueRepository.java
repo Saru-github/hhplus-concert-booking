@@ -20,6 +20,7 @@ public class RedisQueueRepository implements QueueRepository {
     private static final String WAITING_QUEUE = "queue:waiting";
     private static final String PROCESSING_TOKEN = "processingToken";
     private static final Long EXPIRED_SECONDS = 60L;
+
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override

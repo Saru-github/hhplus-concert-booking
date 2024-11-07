@@ -27,7 +27,9 @@ public class QueueService {
             tokenValue = queueRepository.registerQueue();
         } else {
             // "Bearer " 제거
-            tokenValue = tokenValue.substring(7);
+            if (tokenValue.startsWith("Bearer ")) {
+                tokenValue = tokenValue.substring(7);
+            }
         }
 
         Long rank = queueRepository.getQueueRank(tokenValue);

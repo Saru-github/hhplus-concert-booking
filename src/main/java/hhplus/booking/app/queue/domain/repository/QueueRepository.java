@@ -1,9 +1,5 @@
 package hhplus.booking.app.queue.domain.repository;
 
-import hhplus.booking.app.queue.domain.entity.Queue;
-
-import java.util.List;
-
 public interface QueueRepository {
     String registerQueue();
 
@@ -11,8 +7,6 @@ public interface QueueRepository {
 
     long getProcessingQueueCount();
 
-    List<Queue> findDeleteExpiredQueues();
-
-    void deleteExpiredQueues();
+    long activateWaitingToken(long updateCount);
 
 }

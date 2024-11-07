@@ -26,14 +26,14 @@ public class TokenInterceptor implements HandlerInterceptor {
         if (tokenValue == null || tokenValue.isBlank()) {
             throw new BusinessException(ErrorCode.TOKEN_NOT_FOUND);
         }
-//
-//        tokenValue = tokenValue.substring(7);
-//
-//        String tokenStatus = queueRepository.getQueue(tokenValue).getStatus();
-//
-//        if (!"PROCESSING".equals(tokenStatus)) {
-//            throw new BusinessException(ErrorCode.TOKEN_NOT_PROCESSING);
-//        }
+
+        tokenValue = tokenValue.substring(7);
+
+        Long tokenRank = queueRepository.getQueueRank(tokenValue);
+
+        if (tokenRank == null) {
+            throw new BusinessException(ErrorCode.TOKEN_NOT_PROCESSING);
+        }
 
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }

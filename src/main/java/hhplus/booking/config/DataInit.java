@@ -115,7 +115,7 @@ public class DataInit implements ApplicationRunner {
             String queueTokenValue = UUID.randomUUID().toString();
             redisTemplate.opsForZSet().add("queue:waiting", queueTokenValue, timestamp);
             queueTokenValue = UUID.randomUUID().toString();
-            redisTemplate.opsForValue().set("processingToken: " +  queueTokenValue, queueTokenValue, Duration.ofMinutes(10));
+            redisTemplate.opsForValue().set("processingToken:" +  queueTokenValue, queueTokenValue, Duration.ofMinutes(10));
 
         }
 
@@ -126,6 +126,6 @@ public class DataInit implements ApplicationRunner {
 
         // Redis에 대기 중인 큐를 추가. 점수는 현재 시간으로 설정.
         redisTemplate.opsForZSet().add("queue:waiting", "TEST_WAITING_TOKEN", timestamp);
-        redisTemplate.opsForValue().set("processingToken: " + "TEST_PROCESSING_TOKEN", "TEST_PROCESSING_TOKEN", Duration.ofMinutes(10));
+        redisTemplate.opsForValue().set("processingToken:" + "TEST_PROCESSING_TOKEN", "TEST_PROCESSING_TOKEN", Duration.ofMinutes(10));
     }
 }

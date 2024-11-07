@@ -1,20 +1,14 @@
 package hhplus.booking.app.queue.domain.repository;
 
-import hhplus.booking.app.queue.domain.entity.Queue;
-
-import java.util.List;
-
 public interface QueueRepository {
-    Queue registerQueue();
+    String registerQueue();
 
-    Queue getQueue(String queueTokenValue);
-
-    List<Queue> findWaitingQueues();
+    Long getQueueRank(String queueTokenValue);
 
     long getProcessingQueueCount();
 
-    List<Queue> findDeleteExpiredQueues();
+    long activateWaitingToken(long updateCount);
 
-    void deleteExpiredQueues();
+    void deleteProcessingToken(String processingToken);
 
 }

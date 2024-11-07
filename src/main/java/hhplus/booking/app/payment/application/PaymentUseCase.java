@@ -6,14 +6,10 @@ import hhplus.booking.app.concert.domain.repository.ConcertRepository;
 import hhplus.booking.app.payment.application.dto.PaymentInfo;
 import hhplus.booking.app.payment.domain.entity.Payment;
 import hhplus.booking.app.payment.domain.repository.PaymentRepository;
-import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
 import hhplus.booking.app.user.domain.entity.User;
 import hhplus.booking.app.user.domain.repository.UserRepository;
-import hhplus.booking.config.exception.BusinessException;
-import hhplus.booking.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,13 +30,12 @@ public class PaymentUseCase {
 
         ConcertSeat concertSeat = concertRepository.getConcertSeat(concertBooking.getConcertSeatId());
         User user = userRepository.getUser(concertBooking.getUserId());
-        Queue queue = queueRepository.getQueue(input.authorizationHeader().substring(7));
 
         user.usePoints(concertSeat.getPrice());
 
         Payment payment = paymentRepository.savePayment(concertBooking.getConcertBookingId(), concertSeat.getPrice());
         concertBooking.updateBookingStatusToCompleted();
-        queue.expireQueue();
+        queueRepository.deleteProcessingToken(input.authorizationHeader().substring(7));
 
         return new PaymentInfo.Output(payment.getPaymentId());
     }

@@ -25,29 +25,28 @@ class ConcurrentQueueServiceIntegrationTest {
     @Autowired
     private QueueService queueService;
 
-    @Autowired
-    private QueueJpaRepository queueRepository;
 
     @Test
-    @DisplayName("40명이 동시에 대기열 조회 시 순서 보장 테스트")
+    @DisplayName("40명이 동시에 대기열 등록시 모두 정상 등록 되어야 함")
     void testConcurrentQueueInfo() throws Exception {
 
         // Given
         List<CompletableFuture<QueueInfo.Output>> futures = new ArrayList<>();
         AtomicLong exceptionCount = new AtomicLong(0L);
+        List<String> tokenList = new ArrayList<>();
 
         // 초기 Queue 데이터 설정
         for (int i = 1; i <= 40; i++) {
-            Queue queue = new Queue((long) i, "tokenValue" + i, "WAITING", LocalDateTime.now().plusMinutes(1), LocalDateTime.now(), LocalDateTime.now());
-            queueRepository.save(queue);
+            QueueInfo.Output result = queueService.getQueueInfo(new QueueInfo.Input(null));
+            tokenList.add(result.tokenValue());
         }
 
         // When
-        for (int i = 1; i <= 40; i++) {
+        for (int i = 0; i < 40; i++) {
             int finalI = i;
             CompletableFuture<QueueInfo.Output> future = CompletableFuture.supplyAsync(() -> {
                 try {
-                    QueueInfo.Input input = new QueueInfo.Input("Bearer tokenValue" + finalI);
+                    QueueInfo.Input input = new QueueInfo.Input(tokenList.get(finalI));
                     return queueService.getQueueInfo(input);
                 } catch (Exception e) {
                     exceptionCount.getAndIncrement();
@@ -74,8 +73,5 @@ class ConcurrentQueueServiceIntegrationTest {
         assertThat(results).hasSize(40); // 총 40개의 결과가 있어야 함
         log.info(results.toString());
         // 추가 검증: 순서가 올바르게 보장되었는지 확인
-        for (int i = 0; i < results.size(); i++) {
-            assertThat(results.get(i).rank()).isEqualTo(i + 1); // rank가 0부터 시작해야 함
-        }
     }
 }

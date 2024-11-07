@@ -1,20 +1,21 @@
 package hhplus.booking.app.queue.application;
 
 import hhplus.booking.app.queue.application.dto.QueueInfo;
-import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
+import hhplus.booking.config.exception.BusinessException;
+import hhplus.booking.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class QueueService {
 
+    @Qualifier("redisQueueRepository")
     private final QueueRepository queueRepository;
 
     @Transactional
@@ -23,26 +24,26 @@ public class QueueService {
         String tokenValue = input.authorizationHeader();
 
         if (tokenValue == null || tokenValue.isBlank()) {
-            tokenValue = queueRepository.registerQueue().getTokenValue();
+            tokenValue = queueRepository.registerQueue();
         } else {
             // "Bearer " 제거
-            tokenValue = tokenValue.substring(7);
+            if (tokenValue.startsWith("Bearer ")) {
+                tokenValue = tokenValue.substring(7);
+            }
         }
 
-        Queue queue = queueRepository.getQueue(tokenValue);
-        long rank = 0;
+        Long rank = queueRepository.getQueueRank(tokenValue);
 
-        if ("WAITING".equals(queue.getStatus())) {
-            List<Queue> waitingQueues = queueRepository.findWaitingQueues();
-            rank = waitingQueues.indexOf(queue) + 1;
-            queue.refreshExpiration();
+        if (rank == null) {
+            throw new BusinessException(ErrorCode.INVALID_TOKEN);
         }
+
+        String status = rank > 0 ? "WAITING" : "PROCESSING";
 
         return QueueInfo.Output.builder()
-                .queueId(queue.getQueueId())
-                .tokenValue(queue.getTokenValue())
+                .tokenValue(tokenValue)
                 .rank(rank)
-                .status(queue.getStatus())
+                .status(status)
                 .build();
     }
 }

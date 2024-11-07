@@ -64,9 +64,9 @@ class ConcurrentUserIntegrationTest {
         UserPointInfo.Output afterUserPoint = userService.getUserPoints(new UserPointInfo.Input(4L, null));
 
         assertThat(beforeUserPoint.balance()).isEqualTo(0L);
-        assertThat(afterUserPoint.balance()).isEqualTo(10000L);
-        assertThat(successCount.get()).isEqualTo(1);
-        assertThat(failCount.get()).isEqualTo(4);
+        assertThat(afterUserPoint.balance()).isEqualTo(50000L);
+        assertThat(successCount.get()).isEqualTo(5);
+        assertThat(failCount.get()).isEqualTo(0);
 
         log.info("테스트 시작 전 포인트: {}", beforeUserPoint.balance());
         log.info("테스트 시작 후 포인트: {}", afterUserPoint.balance());

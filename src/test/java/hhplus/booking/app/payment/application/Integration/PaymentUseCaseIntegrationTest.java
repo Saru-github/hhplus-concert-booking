@@ -9,11 +9,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class PaymentUseCaseIntegrationTest {
 
     @Autowired
@@ -27,9 +29,9 @@ class PaymentUseCaseIntegrationTest {
     void successTestPaymentUseCase() throws Exception {
 
         // Given
-        concertService.bookConcertSeat(new ConcertBookingInfo.Input(1L, 11L));
+        concertService.bookConcertSeat(new ConcertBookingInfo.Input(1L, 12L));
 
-        PaymentInfo.Input input = new PaymentInfo.Input(1L, "Bearer TEST_UUID_TOKEN");
+        PaymentInfo.Input input = new PaymentInfo.Input(3L, "Bearer TEST_UUID_TOKEN");
 
         // When
         PaymentInfo.Output result = paymentUseCase.processPayment(input);
@@ -45,7 +47,7 @@ class PaymentUseCaseIntegrationTest {
         // when & then
         assertThatThrownBy(() -> concertService.bookConcertSeat(new ConcertBookingInfo.Input(1L, 1L)))
                 .isInstanceOf(BusinessException.class)
-                .hasMessageContaining("예약 가능한 좌석이 아닙니다.");
+                .hasMessageContaining("해당 좌석이 이미 예약되었습니다.");
 
     }
 

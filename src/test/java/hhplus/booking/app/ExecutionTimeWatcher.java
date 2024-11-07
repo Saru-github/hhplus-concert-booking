@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
 
 
-// ExtendWith 로 사용
 @Slf4j
 public class ExecutionTimeWatcher implements TestWatcher, BeforeTestExecutionCallback {
 

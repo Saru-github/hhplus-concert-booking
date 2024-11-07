@@ -29,9 +29,9 @@ public class TokenInterceptor implements HandlerInterceptor {
 
         tokenValue = tokenValue.substring(7);
 
-        String tokenStatus = queueRepository.getQueue(tokenValue).getStatus();
+        Long tokenRank = queueRepository.getQueueRank(tokenValue);
 
-        if (!"PROCESSING".equals(tokenStatus)) {
+        if (tokenRank == null) {
             throw new BusinessException(ErrorCode.TOKEN_NOT_PROCESSING);
         }
 

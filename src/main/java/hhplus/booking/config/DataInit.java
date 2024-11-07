@@ -9,16 +9,20 @@ import hhplus.booking.app.concert.infra.jpa.ConcertJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertScheduleJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertSeatJpaRepository;
 import hhplus.booking.app.queue.domain.entity.Queue;
+import hhplus.booking.app.queue.infra.RedisQueueRepository;
 import hhplus.booking.app.queue.infra.jpa.QueueJpaRepository;
 import hhplus.booking.app.user.domain.entity.User;
 import hhplus.booking.app.user.infra.jpa.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 @Component
@@ -32,21 +36,28 @@ public class DataInit implements ApplicationRunner {
     private final QueueJpaRepository queueJpaRepository;
     private final ConcertBookingJpaRepository concertBookingJpaRepository;
 
+    private final RedisQueueRepository redisQueueRepository;
+    private final RedisTemplate<String, String> redisTemplate;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        runningRedisData();
+        runningJpaData();
+    }
 
-        // queueId 1~10: PROCESSING 대기열 10개 생성
-        for (long i = 0;  i < 10; i++) {
-            queueJpaRepository.save(new Queue(UUID.randomUUID().toString(), "PROCESSING", null));
-        }
-
-        // queueId 10~50: WAITING 대기열 40개 생성
-        for (int i = 10;  i < 50; i++) {
-            queueJpaRepository.save(Queue.from(UUID.randomUUID().toString()));
-        }
-
-        // queueID 51: TEST_UUID_TOKEN를 tokenValue로 가진 WAITING 대기열 1개 생성
-        queueJpaRepository.save(Queue.from("TEST_UUID_TOKEN"));
+    public void runningJpaData() {
+//        // queueId 1~10: PROCESSING 대기열 10개 생성
+//        for (long i = 0;  i < 10; i++) {
+//            queueJpaRepository.save(new Queue(UUID.randomUUID().toString(), "PROCESSING", null));
+//        }
+//
+//        // queueId 10~50: WAITING 대기열 40개 생성
+//        for (int i = 10;  i < 50; i++) {
+//            queueJpaRepository.save(Queue.from(UUID.randomUUID().toString()));
+//        }
+//
+//        // queueID 51: TEST_UUID_TOKEN를 tokenValue로 가진 WAITING 대기열 1개 생성
+//        queueJpaRepository.save(new Queue("TEST_UUID_TOKEN", "WAITING", null));
 
         // userId 1~3: 10만 포인트를 가진 유저 생성
         userJpaRepository.save(new User(null, "유저1", 10000000L));
@@ -77,10 +88,44 @@ public class DataInit implements ApplicationRunner {
             }
         }
 
-        // concertBookingID 1: 1번유저, 2번좌석 을 가진 예약 정보 생성
+        // concertBookingID 1: 1번유저, 11번좌석 을 가진 예약 정보 생성
         concertBookingJpaRepository.save(new ConcertBooking(null,1L, 11L, "BOOKED", LocalDateTime.now().plusMinutes(5)));
 
         // concertBookingID 2: 1번유저, 1번좌석 을 가진 예약 정보 생성
         concertBookingJpaRepository.save(new ConcertBooking(null,1L, 1L, "COMPLETED", LocalDateTime.now()));
+
+        // concertBookingID 3: 1번유저, 12번좌석 을 가진 예약 정보 생성
+        concertBookingJpaRepository.save(new ConcertBooking(null,1L, 12L, "BOOKED", LocalDateTime.now().plusMinutes(5)));
+
+    }
+
+    public void runningRedisData() {
+        // queueId 1~10: PROCESSING 대기열 10개 생성
+        for (long i = 0;  i < 10; i++) {
+            redisQueueRepository.registerQueue();
+        }
+
+        // queueId 10~50: WAITING 대기열 40개 생성
+        for (int i = 10;  i < 50; i++) {
+
+            LocalDateTime nowKST = LocalDateTime.now(ZoneOffset.ofHours(9));  // 한국 시간(KST) 기준
+            long timestamp = nowKST.toEpochSecond(ZoneOffset.ofHours(9));  // 시간(초 단위)
+
+            // Redis에 대기 중인 큐를 추가. 점수는 현재 시간으로 설정.
+            String queueTokenValue = UUID.randomUUID().toString();
+            redisTemplate.opsForZSet().add("queue:waiting", queueTokenValue, timestamp);
+            queueTokenValue = UUID.randomUUID().toString();
+            redisTemplate.opsForValue().set("processingToken:" +  queueTokenValue, queueTokenValue, Duration.ofMinutes(10));
+
+        }
+
+        // queueID 51: TEST_UUID_TOKEN를 tokenValue로 가진 WAITING 대기열 1개 생성
+        LocalDateTime nowKST = LocalDateTime.now(ZoneOffset.ofHours(9));  // 한국 시간(KST) 기준
+        long timestamp = nowKST.toEpochSecond(ZoneOffset.ofHours(9));  // 시간(초 단위)
+
+
+        // Redis에 대기 중인 큐를 추가. 점수는 현재 시간으로 설정.
+        redisTemplate.opsForZSet().add("queue:waiting", "TEST_WAITING_TOKEN", timestamp);
+        redisTemplate.opsForValue().set("processingToken:" + "TEST_PROCESSING_TOKEN", "TEST_PROCESSING_TOKEN", Duration.ofMinutes(10));
     }
 }

@@ -4,6 +4,7 @@ import hhplus.booking.app.user.application.UserService;
 import hhplus.booking.app.user.application.dto.UserPointInfo;
 import hhplus.booking.app.user.domain.entity.User;
 import hhplus.booking.app.user.domain.repository.UserRepository;
+import hhplus.booking.config.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -86,7 +87,7 @@ class UserServiceTest {
 
         // when & then
         assertThatThrownBy(() -> new UserPointInfo.Input(1L, 0L))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("요청 포인트는 0 이하 일 수 없습니다.");
     }
 
@@ -101,7 +102,7 @@ class UserServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.useUserPoints(input))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("남은 잔액이 부족합니다.");
 
     }

@@ -6,7 +6,6 @@ import hhplus.booking.app.concert.domain.repository.ConcertRepository;
 import hhplus.booking.app.payment.application.dto.PaymentInfo;
 import hhplus.booking.app.payment.domain.entity.Payment;
 import hhplus.booking.app.payment.domain.repository.PaymentRepository;
-import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
 import hhplus.booking.app.user.domain.entity.User;
 import hhplus.booking.app.user.domain.repository.UserRepository;

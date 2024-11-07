@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-@Primary
 public class RedisQueueRepository implements QueueRepository {
 
     private static final String WAITING_QUEUE = "queue:waiting";

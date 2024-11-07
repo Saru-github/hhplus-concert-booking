@@ -9,4 +9,6 @@ public interface QueueRepository {
 
     long activateWaitingToken(long updateCount);
 
+    void deleteProcessingToken(String processingToken);
+
 }

@@ -30,14 +30,13 @@ public class PaymentUseCase {
         concertBooking.validConcertBookingStatus();
 
         ConcertSeat concertSeat = concertRepository.getConcertSeat(concertBooking.getConcertSeatId());
-//        User user = userRepository.getUser(concertBooking.getUserId());
-//        Queue queue = queueRepository.getQueue(input.authorizationHeader().substring(7));
-//
-//        user.usePoints(concertSeat.getPrice());
+        User user = userRepository.getUser(concertBooking.getUserId());
+
+        user.usePoints(concertSeat.getPrice());
 
         Payment payment = paymentRepository.savePayment(concertBooking.getConcertBookingId(), concertSeat.getPrice());
         concertBooking.updateBookingStatusToCompleted();
-//        queue.expireQueue();
+        queueRepository.deleteProcessingToken(input.authorizationHeader().substring(7));
 
         return new PaymentInfo.Output(payment.getPaymentId());
     }

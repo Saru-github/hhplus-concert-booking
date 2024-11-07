@@ -64,7 +64,4 @@ public class Queue extends BaseTimeEntity {
         this.expiredAt = LocalDateTime.now().plusMinutes(10);
     }
 
-    public void expireQueue() {
-        this.expiredAt = LocalDateTime.now();
-    }
 }

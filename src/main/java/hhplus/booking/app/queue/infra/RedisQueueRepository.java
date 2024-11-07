@@ -72,4 +72,9 @@ public class RedisQueueRepository implements QueueRepository {
         }
         return successUpdatedCount;
     }
+
+    @Override
+    public void deleteProcessingToken(String processingToken) {
+        redisTemplate.opsForValue().getAndDelete(processingToken);
+    }
 }

@@ -35,7 +35,7 @@ public class ConcertRepositoryImpl implements ConcertRepository {
 
     @Override
     public List<ConcertSeat> getAvailableConcertSeats(Long concertScheduleId) {
-        return concertSeatJpaRepository.findAllByConcertScheduleIdAndStatus(concertScheduleId, "AVAILABLE");
+        return concertSeatJpaRepository.findAllByStatusAndConcertScheduleId("AVAILABLE", concertScheduleId);
     }
 
     @Override

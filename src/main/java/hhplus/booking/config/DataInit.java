@@ -114,7 +114,7 @@ public class DataInit implements ApplicationRunner {
             String queueTokenValue = UUID.randomUUID().toString();
             redisTemplate.opsForZSet().add("queue:waiting", queueTokenValue, timestamp);
             queueTokenValue = UUID.randomUUID().toString();
-            redisTemplate.opsForValue().set("processingToken:" +  queueTokenValue, queueTokenValue, Duration.ofMinutes(10));
+            redisTemplate.opsForValue().set("processingToken:" +  queueTokenValue, queueTokenValue, Duration.ofMinutes(1000));
 
         }
 

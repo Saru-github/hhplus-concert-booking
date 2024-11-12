@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface ConcertSeatJpaRepository extends JpaRepository<ConcertSeat, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<ConcertSeat> findById(Long id);
-    List<ConcertSeat> findAllByConcertScheduleIdAndStatus(Long concertScheduleId, String status);
+    List<ConcertSeat> findAllByStatusAndConcertScheduleId(String status, Long concertScheduleId);
 
 }

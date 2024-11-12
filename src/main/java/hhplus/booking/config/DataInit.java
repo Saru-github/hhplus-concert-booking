@@ -8,7 +8,6 @@ import hhplus.booking.app.concert.infra.jpa.ConcertBookingJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertScheduleJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertSeatJpaRepository;
-import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.infra.RedisQueueRepository;
 import hhplus.booking.app.queue.infra.jpa.QueueJpaRepository;
 import hhplus.booking.app.user.domain.entity.User;

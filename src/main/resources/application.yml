@@ -13,12 +13,10 @@ spring:
     username: root
     password:
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create  # 개발 환경에서 `update` 사용, 필요시 `create`로 변경
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
         show_sql: true
   data:

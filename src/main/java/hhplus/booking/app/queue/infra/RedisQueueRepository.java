@@ -2,7 +2,6 @@ package hhplus.booking.app.queue.infra;
 
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -75,6 +74,10 @@ public class RedisQueueRepository implements QueueRepository {
 
     @Override
     public void deleteProcessingToken(String processingToken) {
-        redisTemplate.opsForValue().getAndDelete(processingToken);
+
+        String value = redisTemplate.opsForValue().get(PROCESSING_TOKEN + ":" + processingToken);
+        if (value != null) {
+            redisTemplate.delete(PROCESSING_TOKEN + ":" + processingToken);
+        }
     }
 }

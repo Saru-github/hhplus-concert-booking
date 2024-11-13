@@ -55,7 +55,7 @@ class UserServiceTest {
 
         // given
         UserPointInfo.Input input = new UserPointInfo.Input(1L, 10000L);
-        given(userRepository.getUser(1L)).willReturn(user);
+        given(userRepository.findUserWithLockById(1L)).willReturn(user);
 
         // when
         UserPointInfo.Output result = userService.chargeUserPoints(input);
@@ -71,7 +71,7 @@ class UserServiceTest {
 
         // given
         UserPointInfo.Input input = new UserPointInfo.Input(1L, 10000L);
-        given(userRepository.getUser(1L)).willReturn(user);
+        given(userRepository.findUserWithLockById(1L)).willReturn(user);
 
         // when
         UserPointInfo.Output result = userService.useUserPoints(input);
@@ -98,7 +98,7 @@ class UserServiceTest {
 
         // given
         UserPointInfo.Input input = new UserPointInfo.Input(1L, 1000001L);
-        given(userRepository.getUser(1L)).willReturn(user);
+        given(userRepository.findUserWithLockById(1L)).willReturn(user);
 
         // when & then
         assertThatThrownBy(() -> userService.useUserPoints(input))

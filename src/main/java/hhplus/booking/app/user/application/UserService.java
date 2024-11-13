@@ -24,7 +24,7 @@ public class UserService {
     @Transactional
     public UserPointInfo.Output chargeUserPoints(UserPointInfo.Input input) {
         try {
-            User user = userRepository.getUser(input.userId());
+            User user = userRepository.findUserWithLockById(input.userId());
             user.chargePoints(input.amount());
             return new UserPointInfo.Output(user);
 
@@ -36,7 +36,7 @@ public class UserService {
     @Transactional
     public UserPointInfo.Output useUserPoints(UserPointInfo.Input input) {
 
-        User user = userRepository.getUser(input.userId());
+        User user = userRepository.findUserWithLockById(input.userId());
         user.usePoints(input.amount());
         return new UserPointInfo.Output(user);
     }

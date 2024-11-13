@@ -1,0 +1,12 @@
+###
+GET {{booking_local}}/concerts/dates?concertId=1
+Authorization: Bearer TEST_PROCESSING_TOKEN
+
+###
+GET {{booking_local}}/booking/seat/concertScheduleId=1
+
+###
+GET {{booking_local}}/booking/concerts/booking
+
+###
+GET {{booking_local}}/booking/concerts/concertScheduleId=1

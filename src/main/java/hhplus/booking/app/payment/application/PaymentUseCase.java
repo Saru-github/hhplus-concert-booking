@@ -4,6 +4,8 @@ import hhplus.booking.app.concert.domain.entity.ConcertBooking;
 import hhplus.booking.app.concert.domain.entity.ConcertSeat;
 import hhplus.booking.app.concert.domain.repository.ConcertRepository;
 import hhplus.booking.app.payment.application.dto.PaymentInfo;
+import hhplus.booking.app.payment.domain.PaymentEventPublisher;
+import hhplus.booking.app.payment.domain.PaymentSuccessEvent;
 import hhplus.booking.app.payment.domain.entity.Payment;
 import hhplus.booking.app.payment.domain.repository.PaymentRepository;
 import hhplus.booking.app.queue.domain.repository.QueueRepository;
@@ -21,6 +23,7 @@ public class PaymentUseCase {
     private final ConcertRepository concertRepository;
     private final PaymentRepository paymentRepository;
     private final QueueRepository queueRepository;
+    private final PaymentEventPublisher paymentEventPublisher;
 
     @Transactional
     public PaymentInfo.Output processPayment(PaymentInfo.Input input) {
@@ -36,6 +39,7 @@ public class PaymentUseCase {
         Payment payment = paymentRepository.savePayment(concertBooking.getConcertBookingId(), concertSeat.getPrice());
         concertBooking.updateBookingStatusToCompleted();
         queueRepository.deleteProcessingToken(input.authorizationHeader().substring(7));
+        paymentEventPublisher.success(new PaymentSuccessEvent(payment.getPaymentId(), payment.getConcertBookingId()));
 
         return new PaymentInfo.Output(payment.getPaymentId());
     }

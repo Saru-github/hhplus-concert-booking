@@ -29,7 +29,7 @@ public class PaymentUseCase {
         concertBooking.validConcertBookingStatus();
 
         ConcertSeat concertSeat = concertRepository.getConcertSeat(concertBooking.getConcertSeatId());
-        User user = userRepository.getUser(concertBooking.getUserId());
+        User user = userRepository.findUserWithLockById(concertBooking.getUserId());
 
         user.usePoints(concertSeat.getPrice());
 

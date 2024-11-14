@@ -18,4 +18,9 @@ public class UserRepositoryImpl implements UserRepository {
     public User getUser(Long userId) {
         return userJpaRepository.findById(userId).orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
+
+    @Override
+    public User findUserWithLockById(Long userId) {
+        return userJpaRepository.findUserWithLockById(userId).orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    }
 }

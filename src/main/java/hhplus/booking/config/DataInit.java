@@ -8,7 +8,6 @@ import hhplus.booking.app.concert.infra.jpa.ConcertBookingJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertScheduleJpaRepository;
 import hhplus.booking.app.concert.infra.jpa.ConcertSeatJpaRepository;
-import hhplus.booking.app.queue.domain.entity.Queue;
 import hhplus.booking.app.queue.infra.RedisQueueRepository;
 import hhplus.booking.app.queue.infra.jpa.QueueJpaRepository;
 import hhplus.booking.app.user.domain.entity.User;
@@ -115,7 +114,7 @@ public class DataInit implements ApplicationRunner {
             String queueTokenValue = UUID.randomUUID().toString();
             redisTemplate.opsForZSet().add("queue:waiting", queueTokenValue, timestamp);
             queueTokenValue = UUID.randomUUID().toString();
-            redisTemplate.opsForValue().set("processingToken:" +  queueTokenValue, queueTokenValue, Duration.ofMinutes(10));
+            redisTemplate.opsForValue().set("processingToken:" +  queueTokenValue, queueTokenValue, Duration.ofMinutes(1000));
 
         }
 

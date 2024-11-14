@@ -1,20 +1,22 @@
 spring:
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:testdb
+#    username: sa
+#    password:
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-    username: sa
+    url: jdbc:mysql://localhost:3306/test
+    username: root
     password:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update  # 개발 환경에서 `update` 사용, 필요시 `create`로 변경
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
         show_sql: true
   data:
@@ -23,7 +25,7 @@ spring:
       port: 6379
   cache:
     redis:
-      time-to-live: 60000 # 1분 동안 캐시 유지
+      time-to-live: 6000000 # 100분 동안 캐시 유지
 server:
   port: 8080
 

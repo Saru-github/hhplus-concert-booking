@@ -2,15 +2,12 @@ package hhplus.booking.app.queue.application.Integration;
 
 import hhplus.booking.app.queue.application.QueueService;
 import hhplus.booking.app.queue.application.dto.QueueInfo;
-import hhplus.booking.app.queue.domain.entity.Queue;
-import hhplus.booking.app.queue.infra.jpa.QueueJpaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

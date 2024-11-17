@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/test
     username: root
-    password:
+    password: qkqh7548
   jpa:
     hibernate:
       ddl-auto: create  # 개발 환경에서 `update` 사용, 필요시 `create`로 변경
@@ -33,11 +33,14 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
       auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 server:
   port: 8080
 
 logging:
   level:
-    org.hibernate.SQL: DEBUG
+    org.hibernate.SQL: INFO
+    org.apache.kafka: INFO
 #    org.hibernate.orm.jdbc.bind: TRACE
 

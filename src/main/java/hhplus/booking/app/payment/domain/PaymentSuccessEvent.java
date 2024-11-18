@@ -1,5 +1,7 @@
 package hhplus.booking.app.payment.domain;
 
 public record PaymentSuccessEvent(
-        Long paymentId, Long concertBookingId
+        String topic,
+        Long paymentId,
+        Long concertBookingId
 ) {}

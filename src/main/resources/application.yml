@@ -27,7 +27,7 @@ spring:
     redis:
       time-to-live: 6000000 # 100분 동안 캐시 유지
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:10000, localhost:10001, localhost:10002
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer

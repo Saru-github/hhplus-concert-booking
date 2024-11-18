@@ -9,18 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
-import java.util.EventListener;
-import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -44,7 +34,8 @@ public class KafkaProduceTest {
         String message = "1,1";
         String topic = "payment";
 
-        kafkaTemplate.send(topic, message);
+
+        paymentEventPublisher.success(new PaymentSuccessEvent(topic, 1L, 1L));
         log.info("토픽 : {} , 보낸 메시지 : {}", topic, message);
         await()
         .atMost(Duration.ofSeconds(10))

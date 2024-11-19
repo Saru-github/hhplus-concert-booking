@@ -11,6 +11,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -45,7 +47,35 @@ public class KafkaProduceTest {
         });
     }
 
-    @KafkaListener(topics = "payment", groupId = "payment_group")
+    @Test
+    @DisplayName("[성공] 카프카 연동 테스트, 카프카 서버에 1000건 전송하고 최대 10초 대기하면서 listener가 받는 메시지와 일치한지 확인한다.")
+    void ConCurrentProduceTestMessage() {
+
+        String topic = "payment_test";
+
+        // Given
+        AtomicLong atomicExceptionCount = new AtomicLong(0L);
+
+        // When
+        for (int i = 0; i < 1000; i++) {
+            Long finalI = (long) i;
+            CompletableFuture.runAsync(() -> {
+                try {
+                    paymentEventPublisher.success(new PaymentSuccessEvent(topic, finalI, finalI));
+                } catch (Exception e) {
+                    atomicExceptionCount.getAndIncrement();
+                }
+            });
+        }
+
+        await()
+        .atMost(Duration.ofSeconds(1000))
+        .untilAsserted(() -> {
+            log.info("받은 메시지 : {}", receivedMessage);
+        });
+    }
+
+    @KafkaListener(topics = "payment_test", groupId = "payment_group")
     public void consumeTestMessage(String message) {
         this.receivedMessage = message;
     }

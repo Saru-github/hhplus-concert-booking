@@ -30,7 +30,4 @@ public class KafkaDefaultConsumer implements PaymentEventListener {
         log.info("========== 저장완료 ==========");
     }
 
-    public void processingPayment() {
-
-    }
 }

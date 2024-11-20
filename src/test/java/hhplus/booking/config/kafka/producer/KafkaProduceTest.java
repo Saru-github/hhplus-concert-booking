@@ -1,7 +1,7 @@
 package hhplus.booking.config.kafka.producer;
 
-import hhplus.booking.app.payment.domain.PaymentEventPublisher;
-import hhplus.booking.app.payment.domain.PaymentSuccessEvent;
+import hhplus.booking.app.payment.domain.event.kafka.PaymentEventPublisher;
+import hhplus.booking.app.payment.domain.event.kafka.dto.KafkaPaymentSuccessEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +11,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -36,8 +37,20 @@ public class KafkaProduceTest {
         String message = "1,1";
         String topic = "payment";
 
+        KafkaPaymentSuccessEvent paymentEventInfo = KafkaPaymentSuccessEvent.builder()
+                .userName("대영")
+                .concertName("IU 콘서트")
+                .concertDate(LocalDate.now())
+                .seatNumber(11L)
+                .price(50000L)
+                .concertBookingId(1L)
+                .paymentId(1L)
+                .build();
 
-        paymentEventPublisher.success(new PaymentSuccessEvent(topic, 1L, 1L));
+        paymentEventPublisher.success(paymentEventInfo);
+
+
+        // paymentEventPublisher.success(new KafkaPaymentSuccessEvent( 1L, 1L));
         log.info("토픽 : {} , 보낸 메시지 : {}", topic, message);
         await()
         .atMost(Duration.ofSeconds(10))
@@ -61,7 +74,7 @@ public class KafkaProduceTest {
             Long finalI = (long) i;
             CompletableFuture.runAsync(() -> {
                 try {
-                    paymentEventPublisher.success(new PaymentSuccessEvent(topic, finalI, finalI));
+                    // paymentEventPublisher.success(new KafkaPaymentSuccessEvent(finalI, finalI));
                 } catch (Exception e) {
                     atomicExceptionCount.getAndIncrement();
                 }

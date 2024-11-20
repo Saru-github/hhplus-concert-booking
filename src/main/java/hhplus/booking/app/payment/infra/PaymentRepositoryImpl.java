@@ -1,7 +1,7 @@
 package hhplus.booking.app.payment.infra;
 
 import hhplus.booking.app.payment.domain.entity.Payment;
-import hhplus.booking.app.payment.domain.entity.PaymentOutBox;
+import hhplus.booking.app.payment.domain.entity.OutBox;
 import hhplus.booking.app.payment.domain.repository.PaymentRepository;
 import hhplus.booking.app.payment.infra.jpa.PaymentJpaRepository;
 import hhplus.booking.app.payment.infra.jpa.PaymentOutBoxJpaRepository;
@@ -21,7 +21,8 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     }
 
     @Override
-    public PaymentOutBox savePaymentOutBox(Long concertBookingId, Long price) {
-        return paymentOutBoxJpaRepository.save(PaymentOutBox.of(concertBookingId, price));
+    public OutBox savePaymentOutBox(Long concertBookingId, Long price) {
+//        return paymentOutBoxJpaRepository.save(OutBox.of(concertBookingId, price));
+        return null;
     }
 }

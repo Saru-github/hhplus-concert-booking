@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/test
     username: root
-    password: qkqh7548
+    password: ${db.password}
   jpa:
     hibernate:
       ddl-auto: create  # 개발 환경에서 `update` 사용, 필요시 `create`로 변경

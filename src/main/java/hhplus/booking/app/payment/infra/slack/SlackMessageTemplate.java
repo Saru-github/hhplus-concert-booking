@@ -1,7 +1,8 @@
-package hhplus.booking.config.slack;
+package hhplus.booking.app.payment.infra.slack;
 
 import com.slack.api.webhook.Payload;
-import hhplus.booking.app.payment.domain.event.kafka.dto.KafkaPaymentSuccessEvent;
+import hhplus.booking.app.payment.application.dto.PaymentEventInfo;
+import hhplus.booking.app.payment.domain.event.kafka.dto.PaymentSuccessEvent;
 
 import java.util.Collections;
 
@@ -12,8 +13,9 @@ import static com.slack.api.model.block.composition.BlockCompositions.markdownTe
 
 public class SlackMessageTemplate {
 
-    public static Payload paymentSuccessTemplate(KafkaPaymentSuccessEvent kafkaPaymentSuccessEvent) {
+    public static Payload paymentSuccessTemplate(PaymentSuccessEvent paymentSuccessEvent) {
 
+    PaymentEventInfo paymentEventInfo = paymentSuccessEvent.message();
 
 //        DateTimeFormatter originalFormat = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 //        DateTimeFormatter newFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -33,13 +35,13 @@ public class SlackMessageTemplate {
                     ))),
                     context(c -> c.elements(Collections.singletonList(
                             markdownText(
-                                        "- 🙋 *예약자 성함*: " + kafkaPaymentSuccessEvent.userName() + "님  \n" +
-                                        "- 🎤 *콘서트 이름*: " + kafkaPaymentSuccessEvent.concertName() + "  \n" +
-                                        "- 📅 *콘서트 날짜*: " + kafkaPaymentSuccessEvent.concertDate() + "  \n" +
-                                        "- 💺 *콘서트 좌석*: " + kafkaPaymentSuccessEvent.seatNumber() + "번 좌석  \n" +
-                                        "- 💰 *티켓 가격*: " + kafkaPaymentSuccessEvent.price() + " ₩  \n" +
-                                        "- 🆔 *티켓 고유번호*: " + kafkaPaymentSuccessEvent.concertBookingId() + "  \n" +
-                                        "- 🧾 *결제 고유번호*: " + kafkaPaymentSuccessEvent.paymentId() + "  \n" +
+                                        "- 🙋 *예약자 성함*: " + paymentEventInfo.userName() + "님  \n" +
+                                        "- 🎤 *콘서트 이름*: " + paymentEventInfo.concertName() + "  \n" +
+                                        "- 📅 *콘서트 날짜*: " + paymentEventInfo.concertDate() + "  \n" +
+                                        "- 💺 *콘서트 좌석*: " + paymentEventInfo.seatNumber() + "번 좌석  \n" +
+                                        "- 💰 *티켓 가격*: " + paymentEventInfo.price() + " ₩  \n" +
+                                        "- 🆔 *티켓 고유번호*: " + paymentEventInfo.concertBookingId() + "  \n" +
+                                        "- 🧾 *결제 고유번호*: " + paymentEventInfo.paymentId() + "  \n" +
                                         "- ✔️ *상태*: 예매 완료! 🎵  \n\n" +
                                         "- ✨ *즐거운 관람 되세요!* 🍿🎶"
                                 )

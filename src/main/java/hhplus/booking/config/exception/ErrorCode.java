@@ -24,6 +24,9 @@ public enum ErrorCode {
     PAYMENT_FAILED_AMOUNT(200, "결제 잔액이 부족합니다."),
     POINT_DUPLICATE_REQUEST(200, "포인트 중복 요청입니다."),
 
+    SLACK_SEND_FAIL(200, "슬랙 메시지 전송이 실패하였습니다."),
+    KAFKA_SEND_FAIL(200, "카프카 메시지 전송이 실패하였습니다."),
+
     INTERNAL_SERVER_ERROR(500, "서버 에러가 발생하였습니다.");
 
     private final int httpStatus;

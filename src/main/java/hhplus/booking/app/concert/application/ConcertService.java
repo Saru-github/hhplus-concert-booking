@@ -7,10 +7,7 @@ import hhplus.booking.app.concert.domain.entity.ConcertBooking;
 import hhplus.booking.app.concert.domain.entity.ConcertSchedule;
 import hhplus.booking.app.concert.domain.entity.ConcertSeat;
 import hhplus.booking.app.concert.domain.repository.ConcertRepository;
-import hhplus.booking.config.exception.BusinessException;
-import hhplus.booking.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

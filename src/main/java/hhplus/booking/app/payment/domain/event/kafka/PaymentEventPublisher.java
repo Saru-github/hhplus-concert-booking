@@ -1,8 +1,17 @@
 package hhplus.booking.app.payment.domain.event.kafka;
 
-import hhplus.booking.app.payment.domain.event.kafka.dto.KafkaPaymentSuccessEvent;
+import hhplus.booking.app.payment.domain.event.kafka.dto.PaymentSuccessEvent;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 
-public interface PaymentEventPublisher {
+@Component
+@RequiredArgsConstructor
+public class PaymentEventPublisher {
 
-    void success(KafkaPaymentSuccessEvent kafkaPaymentSuccessEvent);
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    public void success(PaymentSuccessEvent paymentSuccessEvent) {
+        applicationEventPublisher.publishEvent(paymentSuccessEvent);
+    }
 }

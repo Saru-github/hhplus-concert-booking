@@ -4,6 +4,9 @@ import hhplus.booking.app.payment.domain.entity.OutBox;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface PaymentOutBoxJpaRepository extends JpaRepository<OutBox, Long> {
+public interface OutBoxJpaRepository extends JpaRepository<OutBox, Long> {
+    List<OutBox> findAllByStatus(String Status);
 }

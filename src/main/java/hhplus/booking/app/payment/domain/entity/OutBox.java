@@ -1,6 +1,9 @@
 package hhplus.booking.app.payment.domain.entity;
 
+import hhplus.booking.app.common.converter.JsonMessageConverter;
+import hhplus.booking.app.payment.application.dto.PaymentEventInfo;
 import hhplus.booking.config.database.BaseTimeEntity;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,11 +27,17 @@ public class OutBox extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long outboxId;
 
+    private String topic;
+
     private String messageKey;
-    private String domainType;
+
     private String eventType;
-    private String message;
+
+    @Convert(converter = JsonMessageConverter.class)
+    private PaymentEventInfo message;
+
     private LocalDateTime sentAt;
+
     private String status;
 
     @PrePersist
@@ -37,12 +46,14 @@ public class OutBox extends BaseTimeEntity {
     }
 
     public static OutBox of(
-            String domainType,
+            String topic,
+            String messageKey,
             String eventType,
-            String message
+            PaymentEventInfo message
     ) {
         return OutBox.builder()
-                .domainType(domainType)
+                .topic(topic)
+                .messageKey(messageKey)
                 .eventType(eventType)
                 .message(message)
                 .build();
@@ -50,18 +61,30 @@ public class OutBox extends BaseTimeEntity {
 
     @Builder
     public OutBox(
+            String topic,
             String messageKey,
-            String domainType,
             String eventType,
-            String message,
+            PaymentEventInfo message,
             LocalDateTime sentAt,
             String status
     ){
+        this.topic = topic;
         this.messageKey = messageKey;
-        this.domainType = domainType;
         this.eventType = eventType;
         this.message = message;
         this.sentAt = sentAt;
         this.status = status;
+    }
+
+    public void updateStatusPublished() {
+        this.status = "PUBLISHED";
+    }
+
+    public void updateSentAt() {
+        this.sentAt = LocalDateTime.now();
+    }
+
+    public void updateStatusCompleted() {
+        this.status = "COMPLETED";
     }
 }

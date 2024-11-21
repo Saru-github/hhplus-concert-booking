@@ -1,7 +1,8 @@
 package hhplus.booking.config.kafka.producer;
 
+import hhplus.booking.app.payment.application.dto.PaymentEventInfo;
 import hhplus.booking.app.payment.domain.event.kafka.PaymentEventPublisher;
-import hhplus.booking.app.payment.domain.event.kafka.dto.KafkaPaymentSuccessEvent;
+import hhplus.booking.app.payment.domain.event.kafka.dto.PaymentSuccessEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,17 +38,22 @@ public class KafkaProduceTest {
         String message = "1,1";
         String topic = "payment";
 
-        KafkaPaymentSuccessEvent paymentEventInfo = KafkaPaymentSuccessEvent.builder()
+        PaymentEventInfo paymentEventInfo = PaymentEventInfo.builder()
                 .userName("대영")
-                .concertName("IU 콘서트")
-                .concertDate(LocalDate.now())
-                .seatNumber(11L)
-                .price(50000L)
-                .concertBookingId(1L)
-                .paymentId(1L)
-                .build();
+                 .concertName("IU 콘서트")
+                 .concertDate(LocalDate.now())
+                 .seatNumber(11L)
+                 .price(50000L)
+                 .concertBookingId(1L)
+                 .paymentId(1L)
+                 .build();
 
-        paymentEventPublisher.success(paymentEventInfo);
+        paymentEventPublisher.success(PaymentSuccessEvent.builder()
+                .topic(topic)
+                 .messageKey(null)
+                 .eventType("test")
+                 .message(paymentEventInfo)
+                 .build());
 
 
         // paymentEventPublisher.success(new KafkaPaymentSuccessEvent( 1L, 1L));
@@ -74,7 +80,24 @@ public class KafkaProduceTest {
             Long finalI = (long) i;
             CompletableFuture.runAsync(() -> {
                 try {
-                    // paymentEventPublisher.success(new KafkaPaymentSuccessEvent(finalI, finalI));
+                    PaymentEventInfo paymentEventInfo = PaymentEventInfo.builder()
+                                                                  .userName("대영")
+                                                                 .concertName("IU 콘서트")
+                                                                 .concertDate(LocalDate.now())
+                                                                 .seatNumber(11L)
+                                                                 .price(50000L)
+                                                                 .concertBookingId(1L + finalI)
+                                                                 .paymentId(1L + finalI)
+                                                                 .build();
+
+
+                     paymentEventPublisher.success(PaymentSuccessEvent.builder()
+                                     .topic(topic)
+                                     .messageKey(null)
+                                     .eventType("test")
+                                     .message(paymentEventInfo)
+                                     .build());
+
                 } catch (Exception e) {
                     atomicExceptionCount.getAndIncrement();
                 }

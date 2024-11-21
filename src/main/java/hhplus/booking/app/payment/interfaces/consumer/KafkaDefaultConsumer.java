@@ -1,11 +1,14 @@
 package hhplus.booking.app.payment.interfaces.consumer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.slack.api.webhook.Payload;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import hhplus.booking.app.payment.application.PaymentEventService;
 import hhplus.booking.app.payment.domain.PaymentEventListener;
-import hhplus.booking.app.payment.domain.event.kafka.dto.KafkaPaymentSuccessEvent;
-import hhplus.booking.config.slack.SlackMessageSender;
-import hhplus.booking.config.slack.SlackMessageTemplate;
+import hhplus.booking.app.payment.domain.entity.OutBox;
+import hhplus.booking.app.payment.domain.event.kafka.dto.PaymentSuccessEvent;
+import hhplus.booking.app.payment.infra.jpa.OutBoxJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -17,9 +20,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class KafkaDefaultConsumer implements PaymentEventListener {
 
-    private final SlackMessageSender slackMessageSender;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final PaymentEventService paymentEventService;
+    private final OutBoxJpaRepository outBoxJpaRepository;
 
     @KafkaListener(topics = "testTopic", groupId = "group_1")
     public void listener(String data) {
@@ -28,18 +31,27 @@ public class KafkaDefaultConsumer implements PaymentEventListener {
 
     @KafkaListener(topics = "payment", groupId = "group_1")
     public void paymentSuccessHandler(ConsumerRecord<String, String> record) {
+
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         String jsonMessage = record.value();
+        PaymentSuccessEvent paymentSuccessEvent;
 
         try {
-            KafkaPaymentSuccessEvent kafkaPaymentSuccessEvent = objectMapper.readValue(jsonMessage, KafkaPaymentSuccessEvent.class);
-            Payload payload = SlackMessageTemplate.paymentSuccessTemplate(kafkaPaymentSuccessEvent);
-            slackMessageSender.send(payload);
-            log.info("결과 슬랙 전송 완료 ======");
-
-        } catch (Exception e) {
-            // 예외 처리 로직
-            e.printStackTrace();
+            paymentSuccessEvent = objectMapper.readValue(jsonMessage, PaymentSuccessEvent.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
+
+        paymentEventService.sendSlackMessage(paymentSuccessEvent);
+
+        OutBox outBox = outBoxJpaRepository.findById(paymentSuccessEvent.outboxId())
+                .orElseThrow(() -> new IllegalStateException("outBoxId를 찾을 수 없습니다."));
+
+        outBox.updateStatusCompleted();
+        outBoxJpaRepository.save(outBox);
+        log.info("======== OUTBOX COMPLTED 상태변경 완료 ========");
 
     }
 

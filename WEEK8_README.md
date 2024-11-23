@@ -200,8 +200,8 @@ public class PaymentEventListener {
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void paymentSuccessHandler(PaymentSuccessEvent paymentsuccessevent) {
-        log.info("결제완료!!! paymentId: {}, concertBookingId: {}", paymentsuccessevent.paymentId(), paymentsuccessevent.concertBookingId());
+    public void paymentSuccessHandler(PaymentSuccessEvent paymentSuccessevent) {
+        log.info("결제완료!!! paymentId: {}, concertBookingId: {}", paymentSuccessevent.paymentId(), paymentSuccessevent.concertBookingId());
         log.info("========== 완료된 정보를 전달합니다.==========");
         log.info("========== 전달완료 ==========");
     }

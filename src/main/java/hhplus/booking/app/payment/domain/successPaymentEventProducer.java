@@ -30,8 +30,7 @@ public class successPaymentEventProducer implements PaymentEventProducer {
         OutBox outBox = outBoxJpaRepository.findById(paymentSuccessEvent.outboxId())
                         .orElseThrow(() -> new IllegalStateException("outBoxId를 찾을 수 없습니다."));
 
-        outBox.updateStatusPublished();
-        outBox.updateSentAt();
+        outBox.published();
         outBoxJpaRepository.save(outBox);
         log.info("======== OUTBOX PUBLISED 상태변경 완료 ========");
     }

@@ -76,11 +76,8 @@ public class OutBox extends BaseTimeEntity {
         this.status = status;
     }
 
-    public void updateStatusPublished() {
+    public void published() {
         this.status = "PUBLISHED";
-    }
-
-    public void updateSentAt() {
         this.sentAt = LocalDateTime.now();
     }
 

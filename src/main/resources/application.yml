@@ -9,9 +9,9 @@ spring:
 #      enabled: true
 #      path: /h2-console
   datasource:
-    url: jdbc:mysql://localhost:3306/test
+    url: jdbc:mysql://mysql_con:3306/sample_db
     username: root
-    password: ${db.password}
+    password: 12345678
   jpa:
     hibernate:
       ddl-auto: create  # 개발 환경에서 `update` 사용, 필요시 `create`로 변경
@@ -21,9 +21,10 @@ spring:
         show_sql: true
   data:
     redis:
-      host: localhost
+      host: redis_con
       port: 6379
   cache:
+    type: redis
     redis:
       time-to-live: 6000000 # 100분 동안 캐시 유지
   kafka:

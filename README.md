@@ -207,7 +207,7 @@ https://github.com/users/Saru-github/projects/1
 <h4>시퀀스 다이어그램</h4>
 </summary>
 <div markdown="1">
-https://github.com/Saru-github/hhplus-concert-booking/blob/step6/docs/sequence_diagram.md
+https://github.com/Saru-github/hhplus-concert-booking/blob/main/docs/sequence_diagram.md
 </div>
 </details>
 
@@ -216,7 +216,7 @@ https://github.com/Saru-github/hhplus-concert-booking/blob/step6/docs/sequence_d
 <h4>플로우 차트</h4>
 </summary>
 <div markdown="1">
-https://github.com/Saru-github/hhplus-concert-booking/blob/step8/docs/flow_chart.md
+https://github.com/Saru-github/hhplus-concert-booking/blob/main/docs/flow_chart.md
 </div>
 </details>
 
@@ -226,7 +226,7 @@ https://github.com/Saru-github/hhplus-concert-booking/blob/step8/docs/flow_chart
 <h4>ERD</h4>
 </summary>
 <div markdown="1">
-https://github.com/Saru-github/hhplus-concert-booking/blob/step8/docs/ERD.md
+https://github.com/Saru-github/hhplus-concert-booking/blob/main/docs/ERD.md
 </div>
 </details>
 
@@ -235,7 +235,7 @@ https://github.com/Saru-github/hhplus-concert-booking/blob/step8/docs/ERD.md
 <h4>API 명세 및 MockAPI, 패키지구조 등</h4>
 </summary>
 <div markdown="1">
-https://github.com/Saru-github/hhplus-concert-booking/blob/step6/docs/API.md
+https://github.com/Saru-github/hhplus-concert-booking/blob/main/docs/API.md
 </div>
 </details>
 
@@ -244,7 +244,7 @@ https://github.com/Saru-github/hhplus-concert-booking/blob/step6/docs/API.md
 <h4>API 4주차 README (테스트 데이터 등)</h4>
 </summary>
 <div markdown="1">
-https://github.com/Saru-github/hhplus-concert-booking/blob/step8/WEEK4_README.md
+https://github.com/Saru-github/hhplus-concert-booking/blob/main/WEEK4_README.md
 </div>
 </details>
 
